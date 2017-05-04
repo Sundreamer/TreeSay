@@ -15,7 +15,7 @@ window.onload = function() {
                 }
             }
         };
-        xhr.open('post', 'http://127.0.0.1:3000/users/login', true);
+        xhr.open('post', 'http://127.0.0.1:3000/api/login', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(convert(data));
     };
@@ -36,7 +36,7 @@ window.onload = function() {
                 }
             }
         };
-        xhr.open('post', 'http://127.0.0.1:3000/users/register', true);
+        xhr.open('post', 'http://127.0.0.1:3000/api/register', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(convert(data));
     };

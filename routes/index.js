@@ -7,13 +7,13 @@ router.get('/', function(req, res, next) {
         res.render('index', { 
             title: 'TreeSay',
             isLogin: true,
-            username: req.session.user
+            nickname: req.session.user
         });
     } else {
         res.render('index', { 
             title: 'TreeSay',
             isLogin: false,
-            username: ''
+            nickname: ''
         });
     }   
 });

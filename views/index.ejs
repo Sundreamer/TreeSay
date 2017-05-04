@@ -8,7 +8,18 @@
   <body>
     <div class="wrap">
         <% if (isLogin) { %>
-            <div><%= username%> 已登录</div>
+            <div class="user">
+                <div class="fl">
+                    <div class="avatar"><img src="/image/avatar.jpg" alt=""></div>
+                    <p><%= nickname%></p>
+                </div>
+                <ul class="fr">
+                   <li>访问：1234次</li>
+                   <li>等级：12级</li> 
+                   <li>文章：134篇</li> 
+                   <li>评论：1314条</li>
+                </ul>  
+            </div>
         <% } else { %>
             <div class="user">
                 <ul class="tab">
@@ -17,12 +28,12 @@
                 </ul>
                 <div class="regbox active">
                     <input type="text" name="user" placeholder="常用邮箱">
-                    <input type="password" name="password" placeholder="密码">
+                    <input type="password" name="pwd" placeholder="密码">
                     <button type="button" id="reg">注册</button>
                 </div>
                 <div class="loginbox">
                     <input type="text" name="user" placeholder="常用邮箱">
-                    <input type="password" name="password" placeholder="密码">
+                    <input type="password" name="pwd" placeholder="密码">
                     <button type="button" id="login">登录</button>
                 </div>
             </div>

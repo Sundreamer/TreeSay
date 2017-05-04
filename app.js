@@ -26,7 +26,7 @@ app.use(session({
     secret: 'treesay',
     cookie: {maxAge: null},
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
