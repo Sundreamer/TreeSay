@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>写文章 - 树说</title>
+	<link rel="stylesheet" href="/stylesheets/reset.css">
+	<link rel="stylesheet" href="/stylesheets/wangEditor.css">
+	<style>
+		body { 
+			padding-top: 70px;
+			background: #efefef;
+		}
+		.edit-container { width: 80%; margin: 30px auto 0; } 
+		.title input{ 
+			width: 100%;
+			margin: 20px 0;
+			line-height: 40px;
+			font-size: 24px;
+			padding: 5px 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			box-sizing: border-box;
+		}
+		.submit { margin: 20px 0; }
+	</style>
+</head>
+<body>
+	<%include header.ejs%>
+	<div class="edit-container">
+		<div class="title">
+			<input type="text" placeholder="文章标题" id="title">
+		</div>
+		<div id="editor" style="height: 400px"></div>
+		<div class="submit">
+			<a href="javascript:;" class="btn btn-default">发表文章</a>
+		</div>
+	</div>
+	<div class="container-full footer">
+		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
+	</div>
+	
+    <script src="/javascripts/valid.js"></script>
+	<script src="/javascripts/jquery-1.10.2.min.js"></script>
+	<script src="/javascripts/wangEditor.js"></script>
+	<script>
+		var editor = new wangEditor('editor');
+		editor.create();
+
+        // 自定义验证标题长度
+        Validator.addValid('maxLen', function(ele) {
+            return ele.value.length < 50;
+        });
+        var artValid = Validator.validGroup(),
+            title = document.querySelector('#title');
+        
+        artValid.add('require', title, function() { alert('标题不能为空') });
+        artValid.add('maxLen', title, function() { alert('标题长度不能大于50个字符') });
+
+		$('.submit a').on('click', function() {
+            if (artValid.emit()) {
+                if (editor.$txt.text().length < 20) {
+                    alert('文章内容不能少于200个字符');
+                } else {
+                    addArticle();
+                }
+            }
+		});
+
+        // 将摘要中的所有文本编辑器自带的 ↵ 符号替换成一个空格
+        function delEnter(txt) {
+            var result = [];
+            for (var i =0, len = txt.length; i < len; i++) {
+                if (txt.charCodeAt(i) === 10 ) {
+                    result.push(' ');
+                } else {
+                    result.push(txt[i]);
+                }
+            }
+            return result.join('');
+        }
+
+        // 提交文章
+        function addArticle() {
+            var cover = editor.$txt.find('img')[0],
+                abstract = editor.$txt.formatText().slice(0, 20);
+
+            var data = {
+                title: title.value,
+                abstract: delEnter(abstract),
+                content: editor.$txt.html(),
+                cover: cover && cover.src || null,
+            };
+
+            console.log(data);
+        }
+	</script>
+</body>
+</html>

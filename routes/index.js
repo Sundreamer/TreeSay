@@ -3,17 +3,19 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if (req.session.user) {
+    if (req.session.userID) {
         res.render('index', { 
-            title: 'TreeSay',
+            title: 'TreeSay（树说） - 点滴生活',
             isLogin: true,
-            nickname: req.session.user
+            userID: req.session.userID,
+            avatar: req.session.avatar,
         });
     } else {
         res.render('index', { 
-            title: 'TreeSay',
+            title: 'TreeSay（树说） - 点滴生活',
             isLogin: false,
-            nickname: ''
+            userID: 0,
+            avatar: '',
         });
     }   
 });

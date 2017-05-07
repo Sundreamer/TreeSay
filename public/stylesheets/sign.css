@@ -1,0 +1,171 @@
+
+/* 单独的重置样式 */
+body { background: #F1F1F1; }
+
+h1, h2, h3, h4, h5, h6, p, input {
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal; 
+    font-size: 100%;
+}
+ol, ul {
+	list-style: none;
+}
+address, caption, cite, code, i, em, b, strong {
+    font-weight: normal;
+    font-style: normal;
+}
+
+@keyframes to-rot {
+	to { transform: rotate(1turn); }
+}
+.logo {
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	font-size: 0;
+	animation: to-rot 3s linear infinite;
+}
+
+/* 注册登录框 */
+.sign {
+	position: absolute;
+	top: 50%; left: 50%;
+	width: 360px;
+	min-width: 320px;
+	padding: 40px 20px;
+	transform: translate(-50%, -50%);
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0,0,0,.2);
+	background: #fff;
+}
+.sign ul {
+	position: relative;
+	height: 40px;
+	margin-bottom: 30px;
+	font-size: 18px;
+	text-align: center;
+}
+.sign ul:after {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	width: 4px; height: 4px;
+	margin: auto;
+	border-radius: 2px;
+	background: #999;
+}
+.sign ul li {
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 0 10px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+}
+.sign ul li:hover, .sign ul li.active { border-bottom: 2px solid #EA6F5A; }
+.sign ul li a { color: #999; }
+.sign ul li.active a {
+	color: #EA6F5A;
+	font-weight: bold;
+}
+.sign > div {
+	display: block;
+	padding: 20px;
+}
+
+/* 输入框 */
+.sign .inputs {
+	width: 100%;
+	border: 1px solid #C8C8C8;
+	border-radius: 5px;
+	background: #F8F8F8;
+}
+.sign input {
+	width: 100%;
+	padding: 0 10px;
+	height: 50px;
+	line-height: 50px;
+	font-size: 14px;
+	background: transparent;
+	box-sizing: border-box;
+}
+.sign input + input { border-top: 1px solid #C8C8C8; }
+
+.sign button {
+	width: 100%;
+	line-height: 36px;
+	font-size: 18px;
+	color: #fff;
+	letter-spacing: 10px;
+	margin: 10px 0;
+}
+
+/* 错误提示 */
+.sign .tip {
+	display: none;
+	width: 100%;
+	line-height: 30px;
+	font-size: 12px;
+	text-align: left;
+	color: #FF5758;
+}
+.sign .tip:before {
+	content: '×';
+	display: inline-block;
+	width: 16px;
+	margin-right: 5px;
+	font-size: 14px;
+	line-height: 16px;
+	text-align: center;
+	border-radius: 100%;
+	color: #fff;
+	background: #FF5758;
+}
+/* 遵守协议 */
+.sign .argee {
+	margin: 10px auto;
+	font-size: 12px;
+	text-align: center;
+	color: #999;
+	line-height: 1.5em;
+}
+/* 社交账号 */
+.sign .sns {
+	position: relative;
+	margin: 10px auto;
+	font-size: 12px;
+	color: #999;
+	line-height: 20px;
+	text-align: center;
+}
+.sign .sns:before, .sign .sns:after {
+	content: '';
+	position: absolute;
+	top: 10px; 
+	width: 50px;
+	border-top: 1px solid;
+}
+.sign .sns:before { left: 50px; }
+.sign .sns:after { right: 50px; }
+
+@media screen and (max-width: 640px) {
+	body { background: #fff; }
+	.sign {
+		position: static;
+		box-shadow: none;
+		transform: none;
+		margin: 0 auto;
+	}
+	.logo { display: none; }
+}
+
+@media screen and (max-width: 360px) {
+	.sign {
+		width: 100%;
+		box-sizing: border-box;
+	}
+}

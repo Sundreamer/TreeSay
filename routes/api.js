@@ -66,8 +66,9 @@ router.post('/login', function(req, res, next) {
         pwd = hashPw(req.body.user, req.body.password);
     
     userDao.queryByUser([user, pwd], function(result) {
-        if (result[0].password === pwd) {
-            req.session.user = req.body.user;
+        if (result.length > 0) {
+            // req.session.userID = result[0].id;
+            // req.session.avatar = result[0].avatar;
             res.json({result: true});
         } else {
             res.json({result: false});
@@ -96,11 +97,13 @@ router.get('/deluser', function(req, res, next) {
 
 // 添加新文章
 router.post('/addarticle', function(req, res, next) {
-    var userID = req.body.userID,
+    var userID = req.session.userID,
         title = req.body.title,
-        content = req.body.content;
+        abstract = req.body.abstract,
+        content = req.body.content,
+        cover = req.body.cover || '/images/article.jpg';
     
-    articleDao.addArticle([userID, title, content], function(result) {
+    articleDao.addArticle([userID, title, abstract, content, cover], function(result) {
         result.affectedRows > 0 ? res.json({result: true}) : res.json({result: false});
     });
 });

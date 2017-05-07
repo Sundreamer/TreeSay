@@ -1,0 +1,112 @@
+/* 单独重置样式 */
+body {
+	padding-top: 70px;
+	background-image: url(../images/userbg.jpg);
+	background-size: 100vw 100vh;
+	background-attachment: fixed;
+}
+h1, h2, h3, h4, h5, h6, p, input {
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal; 
+    font-size: 100%;
+}
+ol, ul {
+	list-style: none;
+}
+address, caption, cite, code, i, em, b, strong {
+    font-weight: normal;
+    font-style: normal;
+}
+/* 用户个人信息 */
+.user-box {
+	margin-top: 50px;
+	border-bottom: 1px dotted #ccc;
+}
+.user-box .main {
+	padding: 20px 0;
+	border-top: 4px double #7F9397;
+	border-bottom: 4px double #7F9397;
+}
+.main .avatar {
+	width: 128px;
+	height: 128px;
+	margin: 0 auto 20px;
+}
+.main .name {
+	font-size: 30px;
+	text-align: center;
+	color: #fff;
+}
+.user-box .info {
+	line-height: 50px;
+	font-size: 14px;
+	color: #A7AEAF;
+	text-align: center;
+}
+.info .setting a{
+	display: inline-block;
+	padding: 5px 8px;
+	margin: 0 5px;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1em;
+	border: 1px solid #A7AEAF;
+	border-radius: 2px;
+}
+
+/* 文章列表 */
+.article-list li {
+	padding: 50px 0 30px;
+	border-bottom: 1px dotted #ccc;
+}
+.article-list li .time {
+	font-size: 14px;
+	color: #fff;
+	line-height: 30px;
+	margin-top: 20px;
+}
+.article-list li .title{
+	font-size: 20px;
+	text-align: left;
+	color: #fff;
+}
+.article-list li .content p {
+	font-size: 14px;
+	line-height: 1.5em;
+	margin: 10px 0;
+	color: #A7AEAF;
+}
+.article-list .cover img {
+	width: 100%;
+	border-radius: 0;
+}
+
+/* 带边框的图片 */
+.img-border {
+	width: 100%;
+	border: 5px solid rgba(255,255,255,.2);
+	border-radius: 100%;
+	transition: all .5s;
+	cursor: pointer;
+}
+.img-border:hover {
+	box-shadow: 0 0 12px rgba(255,255,255,.8);
+}
+
+/* 文字发光 */
+.text-light:hover {
+	text-shadow: 0 0 12px rgba(255,255,255,.6);
+}
+
+/* 底部 */
+.footer {
+	margin-top: 40px;
+	padding: 20px;
+	text-align: center;
+	color: #A7AEAF;
+	border: none;
+	background: transparent;
+}

@@ -1,0 +1,84 @@
+/* 单独重置样式 */
+body { padding-top: 70px; }
+ul, h1, h2, h3, h4, h5, h6, p{
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal; 
+    font-size: 100%;
+}
+ol, ul {
+	list-style: none;
+}
+address, caption, cite, code, i, em, b, strong {
+    font-weight: normal;
+    font-style: normal;
+}
+
+.bg-full {
+	height: 500px;
+	background: url(/images/bg.jpg);
+	background-size: cover;
+}
+
+/* 首页幻灯片 */
+.slider {
+	/*padding-right: 250px;*/
+	position: relative;
+}
+
+/* 文章列表 */
+.title {
+	line-height: 50px;
+	font-size: 20px;
+	padding: 5px 10px;
+	border-bottom: 1px dashed #b0b0b0;
+}
+.list { margin: 10px -15px; }
+.list li{
+	margin: 10px 0;
+	padding: 0 20px;
+}
+.list li .item {
+	padding: 8px;
+	border: 1px solid #E1E1E1;
+	background: #fff;
+	overflow: hidden;
+}
+.list li .item:hover { box-shadow: 0 0 15px rgba(0,0,0,.2); }
+.item .pic { overflow: hidden; }
+.item img {
+	display: block;
+	width: 100%;
+	transition: all .5s;
+}
+.item img:hover { transform: scale(1.2); }
+.item .content > h3 {
+	padding: 0 10px;
+	line-height: 30px;
+	font-size: 16px;
+}
+.item .content > p {
+	padding: 5px 10px;
+	line-height: 1.5em;
+	font-size: 14px;
+	color: #999;
+}
+.item .time {
+	padding: 0 10px;
+	line-height: 40px;
+	font-size: 12px;
+	color: #77778D;
+	border: 1px dashed #C2C2C2;
+}
+
+/* 查看更多按钮 */
+.more { text-align: center; }
+
+/* 首屏登录框响应式处理 */
+@media screen and (max-width: 640px) {
+	.user { width: 200px; }
+	.user .pic { width: 100%; }
+	.user .data { display: none; }
+}

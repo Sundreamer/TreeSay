@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>登录 - 树说</title>
+	<link rel="stylesheet" href="/stylesheets/reset.css">
+	<link rel="stylesheet" href="/stylesheets/sign.css">
+</head>
+<body>
+	<div class="sign">
+		<a href="/" class="logo"><img src="/images/logo.png" alt=""></a>
+		<ul>
+			<li class="active"><a href="javascript:;">登录</a></li>
+			<li><a href="/users/register">注册</a></li>
+		</ul>
+		<div>
+			<div class="inputs login-input">
+				<input type="text" placeholder="常用邮箱">
+				<input type="password" placeholder="密码">
+			</div>
+			<span class="tip login-tip"></span>
+			<button class="btn btn-default" id="loginbtn">登录</button>
+			<div class="sns">社交账号直接登录</div>
+		</div>
+	</div>
+	<script src="/javascripts/jquery-1.10.2.min.js"></script>
+	<script src="/javascripts/valid.js"></script>
+	<script>
+		// 登录验证
+		$('#loginbtn').click(function(e) {
+			var tip = $('.login-tip');
+				user = document.querySelectorAll('.login-input input')[0],
+				pwd = document.querySelectorAll('.login-input input')[1];
+
+			var loginValid = Validator.validGroup();
+			loginValid.add('require', user, function() { tip.show().text('账号不能为空'); });
+			loginValid.add('require', pwd, function() { tip.show().text('密码不能为空'); });
+
+			if (loginValid.emit()) {
+				var data = {
+					user: user.value,
+					password: pwd.value,
+				};
+				$.post('/api/login', data, function(data) {
+					if (data.result) {
+						location.href = '/';
+					} else {
+                        tip.show().text('用户名或密码错误');
+                    }
+				});
+			}
+		});
+	</script>
+</body>
+</html>

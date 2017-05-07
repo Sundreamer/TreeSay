@@ -1,43 +1,97 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="/javascripts/index.js"></script>
-  </head>
-  <body>
-    <div class="wrap">
-        <% if (isLogin) { %>
-            <div class="user">
-                <div class="fl">
-                    <div class="avatar"><img src="/image/avatar.jpg" alt=""></div>
-                    <p><%= nickname%></p>
-                </div>
-                <ul class="fr">
-                   <li>访问：1234次</li>
-                   <li>等级：12级</li> 
-                   <li>文章：134篇</li> 
-                   <li>评论：1314条</li>
-                </ul>  
-            </div>
-        <% } else { %>
-            <div class="user">
-                <ul class="tab">
-                    <li class="active">注册</li>
-                    <li>登录</li>
-                </ul>
-                <div class="regbox active">
-                    <input type="text" name="user" placeholder="常用邮箱">
-                    <input type="password" name="pwd" placeholder="密码">
-                    <button type="button" id="reg">注册</button>
-                </div>
-                <div class="loginbox">
-                    <input type="text" name="user" placeholder="常用邮箱">
-                    <input type="password" name="pwd" placeholder="密码">
-                    <button type="button" id="login">登录</button>
-                </div>
-            </div>
-        <% } %>
-    </div>
-  </body>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title><%= title %></title>
+	<link rel="stylesheet" href="/stylesheets/reset.css">
+	<link rel="stylesheet" href="/stylesheets/index.css">
+</head>
+<body>
+	<%include header.ejs%>
+	<div class="container slider">
+		<div class="bg-full"></div>
+	</div>
+	<div class="container">
+		<div class="title">最新文章</div>
+		<ul class="row list">
+			<li class="col-1">
+				<div class="item">
+					<div class="pic">
+						<a href="#"><img src="images/article.jpg" alt=""></a>
+					</div>
+					<div class="content">
+						<h3>文章标题</h3>
+						<p>文章摘要文章摘要文章摘要文章摘要文章摘要</p>
+					</div>
+					<div class="time clearfix">
+						<div class="fl"><i>2017-05-03</i></div>
+						<div class="fr">
+							<i>点赞 12</i>
+							<i>评论 10</i>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="col-1">
+				<div class="item">
+					<div class="pic">
+						<a href="#"><img src="images/article.jpg" alt=""></a>
+					</div>
+					<div class="content">
+						<h3>文章标题</h3>
+						<p>文章摘要文章摘要文章摘要文章摘要文章摘要</p>
+					</div>
+					<div class="time clearfix">
+						<div class="fl"><i>2017-05-03</i></div>
+						<div class="fr">
+							<i>点赞 12</i>
+							<i>评论 10</i>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="col-1">
+				<div class="item">
+					<div class="pic">
+						<a href="#"><img src="images/article.jpg" alt=""></a>
+					</div>
+					<div class="content">
+						<h3>文章标题</h3>
+						<p>文章摘要文章摘要文章摘要文章摘要文章摘要</p>
+					</div>
+					<div class="time clearfix">
+						<div class="fl"><i>2017-05-03</i></div>
+						<div class="fr">
+							<i>点赞 12</i>
+							<i>评论 10</i>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="col-1">
+				<div class="item">
+					<div class="pic">
+						<a href="#"><img src="images/article.jpg" alt=""></a>
+					</div>
+					<div class="content">
+						<h3>文章标题</h3>
+						<p>文章摘要文章摘要文章摘要文章摘要文章摘要</p>
+					</div>
+					<div class="time clearfix">
+						<div class="fl"><i>2017-05-03</i></div>
+						<div class="fr">
+							<i>点赞 12</i>
+							<i>评论 10</i>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<div class="more"><a href="javascript:;" class="btn btn-default">查看更多</a></div>
+	</div>
+	<div class="container-full footer">
+		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
+	</div>
+</body>
 </html>

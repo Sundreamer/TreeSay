@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>注册 - 树说</title>
+	<link rel="stylesheet" href="/stylesheets/reset.css">
+	<link rel="stylesheet" href="/stylesheets/sign.css">
+</head>
+<body>
+	<div class="sign">
+		<a href="/" class="logo"><img src="/images/logo.png" alt=""></a>
+		<ul>
+			<li><a href="/users/login">登录</a></li>
+			<li class="active"><a href="javascript:;">注册</a></li>
+		</ul>
+		<div>
+			<div class="inputs reg-input">
+				<input type="text" placeholder="常用邮箱">
+				<input type="password" placeholder="设置密码">
+				<input type="password" placeholder="再次输入密码">
+			</div>
+			<span class="tip reg-tip">用户名已被注册</span>
+			<button class="btn btn-success" id="regbtn">注册</button>
+			<div class="argee">点击“注册”即表示您同意并愿意遵守树说<br>用户协议 和 隐私政策</div>
+			<div class="sns">社交账号直接注册</div>
+		</div>
+	</div>
+	<script src="/javascripts/jquery-1.10.2.min.js"></script>
+	<script src="/javascripts/valid.js"></script>
+	<script>
+        (function() {
+            // 注册 - 使用验证组来进行多重验证
+            var userValid = Validator.validGroup(),
+                pwdValid = Validator.validGroup(),
+                inputs = document.querySelectorAll('.reg-input input'),
+                userName = inputs[0],
+                pwd = inputs[1],
+                rePwd = inputs[2];
+
+            // 添加自定义验证方法 - 验证账号是否被注册过
+            Validator.addValid('isReg', function(ele) {
+                $.get('/api/getuserbyusername?user=' + ele.value, function(data) {
+                    if (data.length > 0) {
+                        userValid.flag = false;
+                        $('.reg-tip').show().text('该账号已被注册');
+                    } else {
+                        userValid.flag = true;
+                    }
+                });
+                return true;
+            });
+
+            // 验证账号输入框
+            userValid.add('require', userName, function() { $('.reg-tip').show().text('账号不能为空'); });
+            userValid.add('email', userName, function() { $('.reg-tip').show().text('账号不是正确的邮箱格式'); });
+            userValid.add('isReg', userName);
+
+            // 验证密码输入框
+            pwdValid.add('require', pwd, function() { $('.reg-tip').show().text('密码不能为空'); });
+            pwdValid.add('require', rePwd, function() { $('.reg-tip').show().text('重复密码不能为空'); });
+            pwdValid.add('repeat', [pwd, rePwd], function() {
+                $('.reg-tip').show().text('两次输入的密码不一致');
+            });
+
+            // 账号实时错误提示
+            $(userName).on('blur', function(e) {
+                userValid.flag = userValid.emit();
+            }).on('focus', function(e) {
+                userValid.flag ? '' : $('.reg-tip').hide();
+            });
+
+            // 验证通过后进行注册
+            $('#regbtn').click(function(e) {
+                if (userValid.flag && pwdValid.emit()) {
+                    var data = {
+                        user: userName.value,
+                        password: pwd.value,
+                    };
+
+                    // $.post('/api/register', data, function(data) {
+                    //     console.log('success');
+                    // });
+                }
+            });
+
+        })();
+	</script>
+</body>
+</html>

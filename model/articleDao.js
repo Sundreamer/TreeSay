@@ -6,7 +6,7 @@ var config = require('./config');
 
 // 文字版常用 sql 语句
 var sql = {
-    insert: 'insert into article(user_id, title, content) values(?,?,?)',
+    insert: 'insert into article(user_id, title, abstract, content, cover) values(?,?,?,?,?)',
     delete: 'delete from article where id=?',
     queryById: 'select * from article where id=?',
     queryByUser: 'select id,title,time,count from article where user_id=?',

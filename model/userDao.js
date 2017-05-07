@@ -11,7 +11,8 @@ var sql = {
 	updatePass:'update user set password=? where id=?',
 	queryById: 'select * from user where id=?',
 	queryAll: 'select * from user',
-    queryByUser: 'select * from user where user=?'
+    queryByUser: 'select * from user where user=?',
+    queryByUP: 'select * from user where user=? and password=?',
 };
 
 var pool = mysql.createPool(config);
@@ -45,4 +46,7 @@ module.exports = {
     modPass: function(param, cb) {
         crud(sql.updatePass, param, cb);
     },
+    queryByUP: function(param, cb) {
+        crud(sql.queryByUP, param, cb);
+    }
 };
