@@ -8,9 +8,10 @@ var config = require('./config');
 var sql = {
     insert: 'insert into comment(user_id, article_id, target_id, content) values(?,?,?,?)',
     delete: 'delete from comment where id=?',
-    queryByArt: 'select * from comment where article_id=?',
-    queryByUser: 'select * from comment where user_id=?',
-    queryByTarget: 'select * from comment where target_id=?',
+    queryByArt: 'select * from CommentView where article_id=?',
+    queryByUser: 'select * from CommentView where user_id=?',
+    queryByTarget: 'select * from CommentView where target_id=?',
+    queryCountByArt: 'select count(*) from CommentView where article_id=?',
 };
 
 var pool = mysql.createPool(config);

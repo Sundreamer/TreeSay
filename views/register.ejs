@@ -40,15 +40,10 @@
 
             // 添加自定义验证方法 - 验证账号是否被注册过
             Validator.addValid('isReg', function(ele) {
-                $.get('/api/getuserbyusername?user=' + ele.value, function(data) {
-                    if (data.length > 0) {
-                        userValid.flag = false;
-                        $('.reg-tip').show().text('该账号已被注册');
-                    } else {
-                        userValid.flag = true;
-                    }
+                $.get('/api/getuserbyuser/' + ele.value, function(data) {
+                    data.length > 0 ? $('.reg-tip').show().text('该账号已被注册') : userValid.flag = true;
                 });
-                return true;
+                return false;
             });
 
             // 验证账号输入框
@@ -77,13 +72,11 @@
                         user: userName.value,
                         password: pwd.value,
                     };
-
-                    // $.post('/api/register', data, function(data) {
-                    //     console.log('success');
-                    // });
+                    $.post('/api/register', data, function(data) {
+                        location.href = '/users/login';
+                    });
                 }
             });
-
         })();
 	</script>
 </body>

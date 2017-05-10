@@ -35,6 +35,7 @@
 
 			var loginValid = Validator.validGroup();
 			loginValid.add('require', user, function() { tip.show().text('账号不能为空'); });
+            loginValid.add('email', user, function() { tip.show().text('邮箱格式不正确'); });
 			loginValid.add('require', pwd, function() { tip.show().text('密码不能为空'); });
 
 			if (loginValid.emit()) {

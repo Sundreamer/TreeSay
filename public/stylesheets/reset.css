@@ -41,7 +41,7 @@ input, textarea, select, button {
 	box-sizing: border-box;
 }
 .container-one {
-	width: 50%;
+	width: 60%;
 	margin: 0 auto;
 	min-width: 320px;
 }
@@ -194,6 +194,26 @@ input, textarea, select, button {
 	background: #505050;
 }
 .footer p { margin: 0; }
+
+/* 信息提示 */
+@keyframes aniTip {
+    30% { opacity: 1; z-index: 99; }
+    90% { opacity: 1; z-index: 99; }
+    100% { opacity: 0; z-index: -1; }
+}
+.msg-tip {
+    position: fixed;
+    top: 50%; left: 50%;
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .5);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: -1;
+}
+.show-tip { animation: aniTip 6s; }
 
 /* 简单响应式 */
 @media screen and (max-width: 1200px) {

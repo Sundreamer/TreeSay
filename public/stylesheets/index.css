@@ -51,6 +51,7 @@ address, caption, cite, code, i, em, b, strong {
 .item img {
 	display: block;
 	width: 100%;
+    height: 160px;
 	transition: all .5s;
 }
 .item img:hover { transform: scale(1.2); }
@@ -64,6 +65,9 @@ address, caption, cite, code, i, em, b, strong {
 	line-height: 1.5em;
 	font-size: 14px;
 	color: #999;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .item .time {
 	padding: 0 10px;

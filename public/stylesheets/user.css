@@ -58,6 +58,9 @@ address, caption, cite, code, i, em, b, strong {
 }
 
 /* 文章列表 */
+.article-list {
+    padding: 0;
+}
 .article-list li {
 	padding: 50px 0 30px;
 	border-bottom: 1px dotted #ccc;
@@ -82,6 +85,9 @@ address, caption, cite, code, i, em, b, strong {
 .article-list .cover img {
 	width: 100%;
 	border-radius: 0;
+}
+.article-list .time i {
+    margin: 0 5px;
 }
 
 /* 带边框的图片 */

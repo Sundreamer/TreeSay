@@ -1,20 +1,12 @@
 /* 单独重置样式 */
-body { padding-top: 70px; }
-body, ul, h1, h2, h3, h4, h5, h6, p, input, textarea {
-	margin: 0;
-	padding: 0;
+body {
+    margin: 0;
+    padding-top: 70px; 
 }
-h1,h2,h3,h4,h5,h6 {
-    font-weight: normal; 
-    font-size: 100%;
-}
-ol, ul {
-	list-style: none;
-}
-address, caption, cite, code, i, em, b, strong {
-    font-weight: normal;
-    font-style: normal;
-}
+li { margin: 10px 0; }
+i { font-style: normal; }
+
+.header li { margin: 0; }
 
 /* 文章 */
 .article {
@@ -39,7 +31,10 @@ address, caption, cite, code, i, em, b, strong {
 	border-radius: 100%;
 	margin-right: 10px;
 }
-.article .author p { line-height: 25px; }
+.article .author p {
+    margin: 0;
+    line-height: 25px; 
+}
 .article .author .name:before {
 	content: '作者';
 	display: inline-block;
@@ -55,6 +50,9 @@ address, caption, cite, code, i, em, b, strong {
 	font-size: 12px;
 	color: #969696;
 }
+
+/* 文章内容 */
+.content p { line-height: 1.5em; }
 
 /* 文章尾部作者资料卡 */
 .show {
@@ -100,7 +98,7 @@ address, caption, cite, code, i, em, b, strong {
 	width: 40px;
 	border-radius: 40px;
 }
-.edit-comment textarea{
+.edit-comment textarea, .edit-comment .shade{
 	width: 100%;
 	padding: 10px;
 	font-size: 14px;
@@ -108,7 +106,13 @@ address, caption, cite, code, i, em, b, strong {
 	border-radius: 5px;
 	box-sizing: border-box;
 	background: #F8F8F8;
+    resize: none;
 }
+.edit-comment .shade {
+    text-align: center;
+    line-height: 3em;
+}
+.edit-comment .submit { display: none; }
 .edit-comment .submit a {
 	color: #969696;
 	padding: 8px 20px;
@@ -129,7 +133,10 @@ address, caption, cite, code, i, em, b, strong {
 }
 .bar h3 { font-weight: bold; }
 
+.comment-list ul { padding: 0; }
+
 .comment-list ul li {
+    list-style: none;
 	padding: 20px 0;
 	font-size: 14px;
 	border-bottom: 1px solid #e1e1e1;
@@ -141,6 +148,7 @@ address, caption, cite, code, i, em, b, strong {
 	border-radius: 100%;
 }
 .comment-list ul li .user p {
+    margin: 0;
 	line-height: 20px;
 	font-size: 14px;
 	color: #333;
@@ -155,6 +163,7 @@ address, caption, cite, code, i, em, b, strong {
 .comment-list ul li .reply { color: #969696; }
 .comment-list ul li .reply i {
 	display: inline-block;
+    margin: 0 5px;
 	cursor: pointer;
 }
 .comment-list ul li .reply i:hover { color: #333; }

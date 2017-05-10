@@ -44,6 +44,7 @@ address, caption, cite, code, i, em, b, strong {
 .sign ul {
 	position: relative;
 	height: 40px;
+    padding: 0;
 	margin-bottom: 30px;
 	font-size: 18px;
 	text-align: center;

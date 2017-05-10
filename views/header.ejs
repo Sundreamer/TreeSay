@@ -3,17 +3,17 @@
     <div class="login-box fr">
         <% if (isLogin) { %>
             <div class="avatar">
-                <a href="/users?userid=<%= userID %>"><img src="/images/avatar.jpg" alt=""></a>
+                <a href="/users/<%= userID %>"><img src="/images/avatar.jpg" alt=""></a>
                 <ul class="setting">
-                    <li><a href="/users?userid=<%= userID %>">我的主页</a></li>
+                    <li><a href="/users/<%= userID %>">我的主页</a></li>
                     <li><a href="#">消息<span>99</span></a></li>
                     <li><a href="#">关注的作者</a></li>
                     <li><a href="#">设置</a></li>
-                    <li><a href="#">退出</a></li>
+                    <li><a href="#" id="quit">退出</a></li>
                 </ul>
             </div>
         <% } else { %>
-            <a href="/users/login<%= userID %>" class="login-btn">登录</a>
+            <a href="/users/login" class="login-btn">登录</a>
             <a href="/users/register" class="reg-btn">注册</a>
         <% } %>
         <a href="/article/newarticle" class="write-btn">写文章</a>	
