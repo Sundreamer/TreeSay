@@ -11,7 +11,7 @@ var sql = {
     updateComm: 'update article set comments=comments+1 where id = ?',
     updateCount: 'update article set count=count+1 where id = ?',
     queryById: 'select * from article where id=?',
-    queryByUser: 'select * from article where user_id=?',
+    queryByUser: 'select * from article where user_id=? order by article.time desc',
     queryByRange: 'select id,title,time,abstract,count,cover,comments from article order by article.time desc limit ?,?',
 };
 

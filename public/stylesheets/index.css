@@ -76,6 +76,7 @@ address, caption, cite, code, i, em, b, strong {
 	color: #77778D;
 	border: 1px dashed #C2C2C2;
 }
+.item .time i { margin: 0 3px; }
 
 /* 查看更多按钮 */
 .more { text-align: center; }

@@ -1,0 +1,69 @@
+body {
+	padding-top: 70px;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+.set-bar {
+	height: 50px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #fff;
+}
+.set-bar li {
+	float: left;
+	padding: 0 20px;
+	line-height: 50px;
+	cursor: pointer;
+}
+.set-bar li.active, .set-bar li:hover { color: #EA6F5A; }
+
+/* 基本设置 */
+.setting { padding: 10px; }
+.setting .line {
+	padding: 20px 0;
+	border-bottom: 1px solid #F0F0F0;
+	overflow: hidden;
+}
+.line span {
+	float: left;
+	width: 100px;
+	line-height: 36px;
+	color: #969696;
+}
+.line span img {
+	width: 100px;
+	border: 1px solid #f0f0f0;
+	border-radius: 100%;
+}
+.line div {
+	position: relative;
+	padding-left: 120px;
+	height: 100%;
+}
+.line div .btn-border { line-height: 1.5em; }
+.line div .fileupload {
+	position: relative;
+	top: -20px;
+	left: -90px;
+	width: 90px;
+	height: 36px;
+	padding: 0;
+	opacity: 0;
+	font-size: 0;
+	cursor: pointer;
+}
+.line div input, .line div textarea {
+	width: 400px;
+	padding: 5px 10px;
+	font-size: 16px;
+	line-height: 1.5em;
+	border: 1px solid #C8C8C8;
+	border-radius: 5px;
+	background: #F8F8F8;
+	resize: none;
+}
+.line .btn-success {
+	width: 100px;
+	text-align: center;
+}

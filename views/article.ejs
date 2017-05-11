@@ -65,29 +65,13 @@
         </li>
     </script>
     <script src="/javascripts/jquery-1.10.2.min.js"></script>
+    <script src="/javascripts/common.js"></script>
     <script src="/javascripts/template.js"></script>
     <script>
         $(function() {
             var articleID = location.href.slice(location.href.lastIndexOf('/') + 1);
 
-            // 转换数据库取出来的时间格式
-            function formatTime(time) {
-                return new Date(time).toLocaleString();
-            }
-
-            // 取字符串中的数字
-            function getNum(str) {
-                return parseInt(str.replace(/[^\d]/g, ''));
-            }
-
-            // 信息提示
-            function showTip(msg) {
-                $('.msg-tip').text(msg).addClass('show-tip');
-                setTimeout(function() {
-                    $('.msg-tip').removeClass('show-tip');
-                }, 6000);
-            };
-
+            // 获取数据渲染页面
             $.get('/api/artpage/' + articleID, function(data) {
                 var user = data.result.user,
                     article = data.result.article,
@@ -99,8 +83,9 @@
                 $('.show .sign').text(user.signature);
 
                 // 文章信息
+                document.title = article.title + ' - 树说';
                 $('.article > h1').text(article.title);
-                $('.text-info').text(formatTime(article.time) + ' 评论 ' + article.comments + ' 点赞 ' + article.count);
+                $('.text-info').text(common.formatTime(article.time) + ' 评论 ' + article.comments + ' 点赞 ' + article.count);
                 $('.article > .content').html(article.content);
                 $('.comment-list .bar h3').text(article.comments + '条评论');
                 $('.like-btn').text('点赞 | ' + article.count);
@@ -109,7 +94,7 @@
                 var tpl = Template.delSpace($('#comm-item').text()),
                     commList = '';
                 for (var i = comment.length - 1; i >= 0; i--) {
-                    comment[i].time = formatTime(comment[i].time);
+                    comment[i].time = common.formatTime(comment[i].time);
                     commList += Template.formatString(tpl, comment[i]);
                 }
                 $('.comment-list ul').append(commList);
@@ -133,12 +118,12 @@
                         time: new Date().toLocaleString(),
                         content: comm.content,
                     };
-                    // 更新评论列表
+                    // 更新评论列表 - 插入到最前面
                     var tpl = Template.delSpace($('#comm-item').text());
                     $('.comment-list ul').prepend(Template.formatString(tpl, user));
 
                     // 更新评论数量
-                    var count = getNum($('.comment-list .bar h3').text()) + 1 + '条评论';
+                    var count = common.getNum($('.comment-list .bar h3').text()) + 1 + '条评论';
                     $('.comment-list .bar h3').text(count);
 
                     // 清空评论输入框
@@ -150,7 +135,7 @@
             $('.submit a:first').click(function(e) {
                 var con = $('#comment').val();
                 if (con === '') {
-                    showTip('评论不能为空');
+                    common.showTip('评论不能为空');
                     return;
                 }
                 var comm = {
@@ -167,11 +152,8 @@
                     $(this).data('flag', 'true');
 
                     // 更新点赞数量
-                    var count = '点赞 | ' + getNum($(this).text());
-                    $(this).text(count);
-                    showTip('点赞成功');
-                } else {
-                    showTip('已经点过赞了');
+                    var count = common.getNum($(this).text()) + 1;
+                    $(this).addClass('liked-btn').text('点赞 | ' + count);
                 }
             });
         });

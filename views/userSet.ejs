@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>个人设置 - 树说</title>
+	<link rel="stylesheet" href="/stylesheets/reset.css">
+	<link rel="stylesheet" href="/stylesheets/userSet.css">
+</head>
+<body>
+	<%include header.ejs %>
+	<div class="container-one">
+		<ul class="set-bar">
+			<li class="active">基本设置</li>
+			<li>文章管理</li>
+		</ul>
+		<div class="setting">
+			<div class="line">
+				<span><img src="/images/avatar.jpg" alt="" id="avatar"></span>
+				<div style="line-height:100px;">
+					<a href="javascript:;" class="btn btn-border">更改头像</a>
+					<input type="file" class="fileupload">
+				</div>
+			</div>
+			<div class="line">
+				<span>昵称</span>
+				<div><input type="text" id="nickname"></div>
+			</div>
+			<div class="line">
+				<span>个性签名</span>
+				<div>
+					<textarea id="signature" cols="30" rows="3" ></textarea>
+				</div>
+			</div>
+			<div class="line"><a href="javascript:;" class="btn btn-success">保存</a></div>
+		</div>
+	</div>
+	<div class="container-full footer">
+		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
+	</div>
+	<script src="/javascripts/jquery-1.10.2.min.js"></script>
+    <script src="/javascripts/common.js"></script>
+    <script src="/javascripts/valid.js"></script>
+	<script>
+		$(function () {
+            // 先获取用户当前信息
+			$.get('/api/upuserinfo', function(data) {
+				$('#avatar').attr('src', data.result.avatar);
+				$('#nickname').val(data.result.nickname);
+				$('#signature').val(data.result.signature);
+			});
+
+			// 在选择图片后上传
+			$('.fileupload').change(function(e) {
+				if ($(this).val().length) {
+		            var fileName = $(this).val();
+		            var extension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+		            if (extension == ".jpg" || extension == ".png") {
+	                    var data = new FormData();
+	                    data.append('avatar', $(this)[0].files[0]);
+	                    $.ajax({
+	                        url: '/upload/avatar',
+	                        type: 'POST',
+	                        data: data,
+	                        contentType: false, //不可缺参数
+	                        processData: false, //不可缺参数
+	                        success: function(data) {
+	                            if (data.result) {
+                                    $('#avatar').attr('src', data.result.url);
+                                }
+	                        },
+	                    });
+		            } else {
+		            	common.showTip('只支持 jpg 和 png 格式的图片！');
+		            } 
+	        	}
+			});
+
+			// 提交更新后的昵称和个性签名
+			$('.btn-success').click(function(e) {
+                // 创建验证组
+                var valids = Validator.validGroup(),
+                    nickname = document.querySelector('#nickname'),
+                    signature = document.querySelector('#signature');
+
+                valids.add('require', nickname, function() { common.showTip('昵称不能为空'); });
+                valids.add('fiftyLen', nickname, function() { common.showTip('昵称长度不能超过50个字符'); });
+                valids.add('require', signature, function() { common.showTip('签名不能为空'); });
+                valids.add('fiftyLen', signature, function() { common.showTip('签名长度不能超过50个字符'); });
+                
+                if (valids.emit()) {
+                    var data = {
+                        nickname: nickname.value,
+                        signature: signature.value,
+                    };
+                    $.post('/api/upuserinfo', data, function(data) {
+                        if (data.result) {
+                            common.showTip('保存成功');
+                            nickname.value = data.nickname;
+                            signature.value = data.signature;
+                        } else {
+                            common.showTip('保存失败');
+                        }
+                    });
+                }
+			});
+		});
+	</script>
+</body>
+</html>

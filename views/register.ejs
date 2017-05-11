@@ -37,26 +37,29 @@
                 userName = inputs[0],
                 pwd = inputs[1],
                 rePwd = inputs[2];
+            
+            // 显示错误提示信息
+            function showTip(msg) {
+                $('.reg-tip').show().text(msg);
+            }
 
             // 添加自定义验证方法 - 验证账号是否被注册过
             Validator.addValid('isReg', function(ele) {
                 $.get('/api/getuserbyuser/' + ele.value, function(data) {
-                    data.length > 0 ? $('.reg-tip').show().text('该账号已被注册') : userValid.flag = true;
+                    data.length > 0 ? showTip('该账号已被注册') : userValid.flag = true;
                 });
                 return false;
             });
 
             // 验证账号输入框
-            userValid.add('require', userName, function() { $('.reg-tip').show().text('账号不能为空'); });
-            userValid.add('email', userName, function() { $('.reg-tip').show().text('账号不是正确的邮箱格式'); });
+            userValid.add('require', userName, function() { showTip('账号不能为空'); });
+            userValid.add('email', userName, function() { showTip('账号不是正确的邮箱格式'); });
             userValid.add('isReg', userName);
 
             // 验证密码输入框
-            pwdValid.add('require', pwd, function() { $('.reg-tip').show().text('密码不能为空'); });
-            pwdValid.add('require', rePwd, function() { $('.reg-tip').show().text('重复密码不能为空'); });
-            pwdValid.add('repeat', [pwd, rePwd], function() {
-                $('.reg-tip').show().text('两次输入的密码不一致');
-            });
+            pwdValid.add('require', pwd, function() { showTip('密码不能为空'); });
+            pwdValid.add('require', rePwd, function() { showTip('重复密码不能为空'); });
+            pwdValid.add('repeat', [pwd, rePwd], function() { showTip('两次输入的密码不一致'); });
 
             // 账号实时错误提示
             $(userName).on('blur', function(e) {
@@ -73,7 +76,7 @@
                         password: pwd.value,
                     };
                     $.post('/api/register', data, function(data) {
-                        location.href = '/users/login';
+                        data.result ? location.href = '/users/login' : showTip('注册失败');
                     });
                 }
             });

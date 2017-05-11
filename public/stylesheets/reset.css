@@ -75,6 +75,10 @@ input, textarea, select, button {
 	background: #3DB922;
 }
 .btn-success:hover { background: #2ca811; }
+.btn-border {
+	color: #3DB922;
+	border: 1px solid #3DB922;
+}
 
 /* 输入框控件 */
 .input-default {

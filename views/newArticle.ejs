@@ -45,63 +45,57 @@
 	<script src="/javascripts/jquery-1.10.2.min.js"></script>
 	<script src="/javascripts/wangEditor.js"></script>
 	<script>
-		var editor = new wangEditor('editor');
-		editor.create();
+        (function() {
+            var editor = new wangEditor('editor');
+            editor.create();
 
-        // 显示提示信息
-        function showTip(msg) {
-            var tip = $('.msg-tip');
-            return function() {
-                tip.addClass('show-tip').text(msg);
-                setTimeout(function() {
-                    tip.removeClass('show-tip');
-                },6000);
-            }
-        }
-
-        // 自定义验证标题长度
-        Validator.addValid('maxLen', function(ele) { return ele.value.length < 50; });
-
-        var artValid = Validator.validGroup(),
-            title = document.querySelector('#title');
-        
-        artValid.add('require', title, showTip('标题不能为空'));
-        artValid.add('maxLen', title, showTip('标题长度不能大于50个字符'));
-
-        // 点击发表按钮时，对标题和文章内容进行验证
-		$('.submit a').on('click', function() {
-            if (artValid.emit()) {
-                if (editor.$txt.text().length < 500) {
-                    showTip('文章内容不能少于500个字符');
-                } else {
-                    addArticle();
+            // 显示提示信息
+            function showTip(msg) {
+                var tip = $('.msg-tip');
+                return function() {
+                    tip.addClass('show-tip').text(msg);
+                    setTimeout(function() {
+                        tip.removeClass('show-tip');
+                    },6000);
                 }
             }
-            addArticle();
-		});
 
-        // 提交文章
-        function addArticle() {
-            var cover = editor.$txt.find('img')[0],
-                abstract = editor.$txt.formatText().slice(0, 200);
+            var artValid = Validator.validGroup(),
+                title = document.querySelector('#title');
+            
+            artValid.add('require', title, showTip('标题不能为空'));
+            artValid.add('fiftyLen', title, showTip('标题长度不能大于50个字符'));
 
-            var data = {
-                title: title.value,
-                abstract: abstract.replace(/\n/g, ' '),
-                content: editor.$txt.html(),
-                cover: cover && cover.src || null,
-            };
-
-            $.post('/api/addarticle', data, function(data) {
-                if (data.result) {
-                    showTip('发表文章成功')();
-                    title.value = '';
-                    editor.clear();
-                } else {
-                    showTip('发表文章失败')();
-                }                                
+            // 点击发表按钮时，对标题和文章内容长度进行验证
+            $('.submit a').on('click', function() {
+                if (artValid.emit()) {
+                    editor.$txt.text().length < 500 ? showTip('文章内容不能少于500个字符') : addArticle();
+                }
             });
-        }
+
+            // 提交文章
+            function addArticle() {
+                var cover = editor.$txt.find('img')[0],
+                    abstract = editor.$txt.formatText().slice(0, 200);
+
+                var data = {
+                    title: title.value,
+                    abstract: abstract.replace(/\n/g, ' '),
+                    content: editor.$txt.html(),
+                    cover: cover && cover.src || null,
+                };
+
+                $.post('/api/addarticle', data, function(data) {
+                    if (data.result) {
+                        showTip('发表文章成功')();
+                        title.value = '';
+                        editor.clear();
+                    } else {
+                        showTip('发表文章失败')();
+                    }                                
+                });
+            }
+        })();
 	</script>
 </body>
 </html>

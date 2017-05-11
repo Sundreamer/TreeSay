@@ -43,7 +43,7 @@
     <script src="/javascripts/jquery-1.10.2.min.js"></script>
     <script src="/javascripts/template.js"></script>
     <script>
-        $(function() {
+        (function() {
             $.get('/api/getindexart/0', function(data) {
                 var result = '',
                     tplStr = Template.delSpace($('#article-item').text()),
@@ -56,7 +56,7 @@
                 }
                 $('.list').append(result);
             });
-        });
+        })();
     </script>
 </body>
 </html>

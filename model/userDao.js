@@ -8,7 +8,9 @@ var config = require('./config');
 var sql = {
     insert:'insert into user(user, password, nickname) values(?,?,?)',
 	delete: 'delete from user where id=?',
-	updatePass:'update user set password=? where id=?',
+	updatePass: 'update user set password=? where id=?',
+    updateInfo: 'update user set nickname=?,signature=? where id=?',
+    updateAvatar: 'update user set avatar=? where id=?',
 	queryById: 'select * from user where id=?',
 	queryAll: 'select * from user',
     queryByUser: 'select * from user where user=?',
@@ -45,6 +47,12 @@ module.exports = {
     },
     modPass: function(param, cb) {
         crud(sql.updatePass, param, cb);
+    },
+    upUserInfo: function(param, cb) {
+        crud(sql.updateInfo, param, cb);
+    },
+    upAvatar: function(param, cb) {
+        crud(sql.updateAvatar, param, cb);
     },
     queryByUP: function(param, cb) {
         crud(sql.queryByUP, param, cb);

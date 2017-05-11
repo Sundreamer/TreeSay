@@ -11,6 +11,19 @@ router.get('/register', function(req, res, next) {
     res.render('register');
 });
 
+// 用户设置
+router.get('/setting', function(req, res, next) {
+    if (req.session.userID) {
+        res.render('userSet', {
+            isLogin: true,
+            userID: req.session.userID,
+            avatar: req.session.avatar,
+        });
+    } else {
+        res.redirect('/users/login');
+    }
+});
+
 /* 获取用户个人主页 */
 router.get('/:userID', function(req, res, next) {
     if (req.session.userID) {

@@ -9,11 +9,14 @@ var jsonWrite = function (res, result) {
     // 当 sql 语句有错误时，返回的结果就是 undefined
 	if(typeof result === 'undefined') {
 		res.json({
-			code:'1',
+			success: false,
 			msg: '操作失败'
 		});
 	} else {
-		res.json(result);
+		res.json({
+            success: true,
+            result: result,
+        });
 	}
 };
 
@@ -33,7 +36,7 @@ router.get('/deluser', function(req, res, next) {
     var userID = req.query.userID;
 
     userDao.delUser(userID, function(result) {
-        result.affectedRows > 0 ? res.json({result: true}) : res.json({result: false});
+        result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
     });
 });
 
@@ -42,7 +45,7 @@ router.get('/delcomment', function(req, res, next) {
     var commentID = req.query.commentID;
 
     commentDao.delComment(commentID, function(result) {
-        result.affectedRows > 0 ? res.json({result: true}) : res.json({result: false});
+        result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
     });
 });
 
@@ -51,6 +54,6 @@ router.get('/getcommbyuser', function(req, res, next) {
     var userID = req.query.userID;
 
     commentDao.queryByUser(userID, function(result) {
-        jsonWrite(result);
+        jsonWrite(res, result);
     });
 });

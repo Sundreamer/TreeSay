@@ -95,6 +95,30 @@ router.post('/modifypwd', function(req, res, next) {
     }
 });
 
+// 用户更新个人信息时，先把当前信息返回给客户端（需要存在会话）
+router.get('/upuserinfo', function(req, res, next) {
+    if (req.session.userID) {
+        var userID = req.session.userID;
+
+        userDao.queryById(userID, function(result) {
+            delete result[0].password;
+            jsonWrite(res, result[0]);
+        });
+    }
+});
+// 用户更新个人信息（需要存在会话）
+router.post('/upuserinfo', function(req, res, next) {
+    if (req.session.userID) {
+        var userID = req.session.userID,
+            nickname = req.body.nickname,
+            signature = req.body.signature;
+
+        userDao.upUserInfo([nickname, signature, userID], function(result) {
+            result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
+        });
+    }
+});
+
 // 添加新文章 - (需要存在会话)
 router.post('/addarticle', function(req, res, next) {  
     if (req.session.userID) {

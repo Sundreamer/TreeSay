@@ -12,14 +12,14 @@
 	<div class="container-one">
 		<div class="user-box">
 			<div class="main">
-				<div class="avatar"><img src="/images/avatar.jpg" alt="头像" class="img-border"></div>
+				<div class="avatar"><img src="<%= avatar%>" alt="头像" class="img-border"></div>
 				<h3 class="name">用户昵称</h3>
 			</div>
 			<div class="info">
 				<p>文艺是什么</p>
 				<div class="setting">
                     <% if (isSelf) { %>
-                        <a href="#">编辑个人资料</a>
+                        <a href="/users/setting">编辑个人资料</a>
                         <a href="#">查看消息</a>
                         <a href="#">文章管理</a>
                     <% } else { %>

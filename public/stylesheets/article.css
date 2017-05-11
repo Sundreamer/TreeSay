@@ -85,6 +85,10 @@ i { font-style: normal; }
 	border: 1px solid #EA6F5A;
 	border-radius: 40px;
 }
+.liked-btn {
+    color: #fff;
+    background: #EA6F5A
+}
 
 /* 评论框 */
 .edit-comment {

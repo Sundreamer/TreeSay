@@ -15,6 +15,9 @@ var Validator = (function(){
 			var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 			return reg.test(ele.value);
 		},
+        fiftyLen: function(ele) {
+            return ele.length < 50;
+        }
 	}
 
 	// 添加验证算法
