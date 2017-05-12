@@ -16,7 +16,7 @@ var Validator = (function(){
 			return reg.test(ele.value);
 		},
         fiftyLen: function(ele) {
-            return ele.length < 50;
+            return ele.value.length < 50;
         }
 	}
 

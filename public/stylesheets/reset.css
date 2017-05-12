@@ -111,7 +111,7 @@ input, textarea, select, button {
 	line-height: 60px;
 	font-size: 18px;
 }
-.nav li:hover { background: #f1f1f1; }
+.nav li:hover { background: #F5F5F5; }
 .nav li.active { background: none; }
 .nav li a { 
 	display: block;
@@ -202,7 +202,7 @@ input, textarea, select, button {
 /* 信息提示 */
 @keyframes aniTip {
     30% { opacity: 1; z-index: 99; }
-    90% { opacity: 1; z-index: 99; }
+    80% { opacity: 1; z-index: 99; }
     100% { opacity: 0; z-index: -1; }
 }
 .msg-tip {
@@ -222,15 +222,15 @@ input, textarea, select, button {
 /* 简单响应式 */
 @media screen and (max-width: 1200px) {
 	.container-one { width: 60%; }
-	.col-1 { width: 33.33%; }
+    .col-1 { width: 33.33%; }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
 	.container-one { width: 70%; }
 	.col-1 { width: 50%; }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
 	.container-one { width: 80%; }
 	.col-1 { width: 100%; }
 }

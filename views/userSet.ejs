@@ -35,6 +35,7 @@
 			<div class="line"><a href="javascript:;" class="btn btn-success">保存</a></div>
 		</div>
 	</div>
+    <div class="msg-tip">提示信息</div>
 	<div class="container-full footer">
 		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
 	</div>
@@ -89,15 +90,15 @@
                 valids.add('fiftyLen', signature, function() { common.showTip('签名长度不能超过50个字符'); });
                 
                 if (valids.emit()) {
-                    var data = {
+                    var newData = {
                         nickname: nickname.value,
                         signature: signature.value,
                     };
-                    $.post('/api/upuserinfo', data, function(data) {
+                    $.post('/api/upuserinfo', newData, function(data) {
                         if (data.result) {
                             common.showTip('保存成功');
-                            nickname.value = data.nickname;
-                            signature.value = data.signature;
+                            nickname.value = newData.nickname;
+                            signature.value = newData.signature;
                         } else {
                             common.showTip('保存失败');
                         }

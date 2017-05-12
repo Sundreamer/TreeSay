@@ -9,13 +9,18 @@
 </head>
 <body>
 	<%include header.ejs%>
-	<div class="container slider">
-		<div class="bg-full"></div>
+	<div class="container-full">
+		<div class="bg-full">
+            <a href="/article/5">
+                <h2>转角遇到爱</h2>
+                <p>企业文化墙设计</p>
+                <p>小肥羊</p>
+            </a>
+        </div>
 	</div>
-	<div class="container">
-		<div class="title">最新文章</div>
+	<div class="container-full">
 		<ul class="row list"></ul>
-		<div class="more"><a href="javascript:;" class="btn btn-default">查看更多</a></div>
+		<div class="more"><a href="javascript:;" class="btn">更多文章</a></div>
 	</div>
 	<div class="container-full footer">
 		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
@@ -41,6 +46,7 @@
         </li>
     </script>
     <script src="/javascripts/jquery-1.10.2.min.js"></script>
+    <script src="/javascripts/common.js"></script>
     <script src="/javascripts/template.js"></script>
     <script>
         (function() {

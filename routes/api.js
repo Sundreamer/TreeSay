@@ -37,18 +37,17 @@ router.get('/getuserbyid/:userID', function(req, res, next) {
     var id = req.params.userID;
 
     userDao.queryById(id, function(result) {
-        delete result[0].password;
+        result[0] && delete result[0].password;
         jsonWrite(res, result[0]);
     });
 });
 
-// 通过用户名获取用户信息（唯一，密码字段不返回）
-router.get('/getuserbyuser/:username', function(req, res, next) {
+// 通过用户名获取用户信息（用于在注册时检测用户名是否已被注册）
+router.get('/isreg/:username', function(req, res, next) {
     var username = req.params.username;
 
     userDao.queryByUser(username, function(result) {
-        delete result[0].password;
-        jsonWrite(res, result[0]);
+        result[0] ? jsonWrite(res, false) : jsonWrite(res, true);
     });
 });
 
@@ -59,11 +58,7 @@ router.post('/register', function(req, res, next) {
         nickname = req.body.user;
     
     userDao.addUser([user, pwd, nickname], function(result) {
-        if (result.affectedRows > 0) {
-            jsonWrite(res, true);
-        } else {
-            jsonWrite(res, false);
-        }
+        result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
     });
 });
 
@@ -72,7 +67,7 @@ router.post('/login', function(req, res, next) {
     var user = req.body.user,
         pwd = hashPw(req.body.user, req.body.password);
     
-    userDao.queryByUser([user, pwd], function(result) {
+    userDao.queryByUP([user, pwd], function(result) {
         if (result.length > 0) {
             req.session.userID = result[0].id;
             req.session.avatar = result[0].avatar;
@@ -81,6 +76,13 @@ router.post('/login', function(req, res, next) {
             jsonWrite(res, false);
         }
     });
+});
+
+// 退出登录（清除会话）
+router.get('/quit', function(req, res, next) {
+    req.session.userID = null;
+    req.session.avatar = null;
+    jsonWrite(res, true);
 });
 
 // 修改密码（需要存在会话）
@@ -101,7 +103,7 @@ router.get('/upuserinfo', function(req, res, next) {
         var userID = req.session.userID;
 
         userDao.queryById(userID, function(result) {
-            delete result[0].password;
+            result[0] && delete result[0].password;
             jsonWrite(res, result[0]);
         });
     }
@@ -225,7 +227,7 @@ router.get('/userpage/:userID', function(req, res, next) {
     
     var promise = new Promise((resolve, reject) => {
         userDao.queryById(userID, (result) => {
-            delete result[0].password;
+            result[0] && delete result[0].password;
             data.user = result[0];
             resolve();
         });
@@ -254,7 +256,7 @@ router.get('/artpage/:articleID', function(req, res, next) {
     });
     promise.then((userID) => {
         userDao.queryById(userID, (result) => {
-            delete result[0].password;
+            result[0] && delete result[0].password;
             data.user = result[0];
         });
     }).then(() => {

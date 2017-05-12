@@ -2,18 +2,14 @@
 /* 单独的重置样式 */
 body { background: #F1F1F1; }
 
-h1, h2, h3, h4, h5, h6, p, input {
+p, input {
 	margin: 0;
 	padding: 0;
-}
-h1,h2,h3,h4,h5,h6 {
-    font-weight: normal; 
-    font-size: 100%;
 }
 ol, ul {
 	list-style: none;
 }
-address, caption, cite, code, i, em, b, strong {
+i, em, b, strong {
     font-weight: normal;
     font-style: normal;
 }

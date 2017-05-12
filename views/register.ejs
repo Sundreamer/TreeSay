@@ -45,8 +45,8 @@
 
             // 添加自定义验证方法 - 验证账号是否被注册过
             Validator.addValid('isReg', function(ele) {
-                $.get('/api/getuserbyuser/' + ele.value, function(data) {
-                    data.length > 0 ? showTip('该账号已被注册') : userValid.flag = true;
+                $.get('/api/isreg/' + ele.value, function(data) {
+                    data.result ? userValid.flag = true : showTip('该账号已被注册');
                 });
                 return false;
             });
