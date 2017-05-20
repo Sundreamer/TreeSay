@@ -96,13 +96,15 @@ i { font-style: normal; }
 	margin: 50px 0 30px;
 	padding-left: 50px;
 }
-.edit-comment img {
+.edit-comment > img {
 	position: absolute;
 	left: 0;
 	width: 40px;
 	border-radius: 40px;
 }
-.edit-comment textarea, .edit-comment .shade{
+
+/* 评论编辑框 */
+.comment-box textarea, .comment-box .shade{
 	width: 100%;
 	padding: 10px;
 	font-size: 14px;
@@ -112,19 +114,54 @@ i { font-style: normal; }
 	background: #F8F8F8;
     resize: none;
 }
-.edit-comment .shade {
+.comment-box .shade {
     text-align: center;
     line-height: 3em;
+    margin-bottom: 10px;
 }
-.edit-comment .submit { display: none; }
-.edit-comment .submit a {
+.comment-box .submit {
+    display: none;
+    position: relative;
+}
+.comment-box .submit a {
+    float: right;
 	color: #969696;
 	padding: 8px 20px;
 }
-.edit-comment .submit .btn {
+.comment-box .submit .btn {
 	margin-left: 10px;
 	color: #fff;
 }
+.comment-box .submit .face-box {
+    display: none;
+    position: absolute;
+    left: 0; top: 100%;
+    width: 240px;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0,0,0,.5);
+    background: #fff;
+}
+.comment-box .submit .face-list {   
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow: hidden;
+}
+.face-list li { 
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    line-height: 30px;
+    font-size: 0;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.face-list li img { vertical-align: middle; }
+.face-list li:hover { background: #e0e0e0; }
 
 /* 评论列表 */
 .comment-list {
@@ -137,37 +174,65 @@ i { font-style: normal; }
 }
 .bar h3 { font-weight: bold; }
 
-.comment-list ul { padding: 0; }
+.comment-list .comments { padding: 0; }
 
-.comment-list ul li {
+.comments > li {
     list-style: none;
 	padding: 20px 0;
 	font-size: 14px;
 	border-bottom: 1px solid #e1e1e1;
 }
-.comment-list ul li .user img{
+.comments > li .user img{
 	float: left;
 	width: 40px;
 	margin-right: 10px;
 	border-radius: 100%;
 }
-.comment-list ul li .user p {
+.comments > li .user p {
     margin: 0;
 	line-height: 20px;
 	font-size: 14px;
 	color: #333;
 }
-.comment-list ul li .user .time {
+.comments > li .user .time {
 	color: #969696;
 	font-size: 12px;
 }
-.comment-list ul li .comm {
+.comments > li .comm {
 	padding: 15px 0;
 }
-.comment-list ul li .reply { color: #969696; }
-.comment-list ul li .reply i {
+.comments > li .reply { color: #969696; }
+.comments > li .reply i {
 	display: inline-block;
     margin: 0 5px;
 	cursor: pointer;
 }
-.comment-list ul li .reply i:hover { color: #333; }
+.comments > li .reply i:hover { color: #333; }
+
+
+/* 评论回复 */
+.comment-list .sub-comment {
+    margin-top: 20px;
+    padding-left: 20px;
+    border-left: 2px solid #D9D9D9;
+}
+.sub-comment > ul {
+    padding: 0;
+    list-style: none;
+}
+.sub-comment > ul li {
+    padding: 15px 0;
+    line-height: 1.5em;
+    font-size: 14px;
+    border-bottom: 1px dashed #F0F0F0;
+}
+.sub-comment > ul li a { color: #4A9ADA; }
+.sub-comment > ul li a:after {
+    content: '：';
+    color: #333;
+    margin: 0 5px;
+}
+.sub-comment > ul li .time {
+    color: #969696;
+    font-size: 12px;
+}

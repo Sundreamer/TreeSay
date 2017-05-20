@@ -8,10 +8,12 @@ var config = require('./config');
 var sql = {
     insert: 'insert into comment(user_id, article_id, target_id, content) values(?,?,?,?)',
     delete: 'delete from comment where id=?',
+    updateLike: 'update comment set like_count=like_count+? where id=?',
+    queryCount: 'select count(*) as count from CommentView',
     queryByArt: 'select * from CommentView where article_id=?',
     queryByUser: 'select * from CommentView where user_id=?',
     queryByTarget: 'select * from CommentView where target_id=?',
-    queryCountByArt: 'select count(*) from CommentView where article_id=?',
+    queryByRange: 'select * from CommentView limit ?,?',
 };
 
 var pool = mysql.createPool(config);
@@ -33,6 +35,9 @@ module.exports = {
     delComment: function(param, cb) {
         crud(sql.delete, param, cb);
     },
+    updateLike: function(param, cb){
+        crud(sql.updateLike, param, cb);
+    },
     queryByArt: function(param, cb) {
         crud(sql.queryByArt, param, cb);
     },
@@ -41,5 +46,11 @@ module.exports = {
     },
     queryByTarget: function(param, cb) {
         crud(sql.queryByTarget, param, cb);
+    },
+    queryByRange: function(param, cb) {
+        crud(sql.queryByRange, param, cb);
+    },
+    queryCount: function(param, cb) {
+        crud(sql.queryCount, param, cb);
     },
 };

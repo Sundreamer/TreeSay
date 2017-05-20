@@ -31,27 +31,35 @@
 		<div class="like"><a href="javascript:;" class="like-btn" data-flag="false">点赞 | 0</a></div>
 		<div class="edit-comment">
 			<img src="/images/avatar.jpg" alt="">
-            <% if(isLogin) { %>
-			    <textarea name="comment" id="comment" cols="30" rows="3" placeholder="写下你的评论..."></textarea>
-            <% } else { %>
-                <div class="shade">请登录后再评论</div>
-            <% } %>
-			<div class="submit">
-				<a href="javascript:;" class="btn btn-success fr">发送</a>
-				<a href="javascript:;" class="fr">取消</a>
-			</div>
+            <div class="comment-box">
+                <% if(isLogin) { %>
+                    <textarea cols="30" rows="3" placeholder="写下你的评论..."></textarea>
+                <% } else { %>
+                    <div class="shade">请登录后再评论</div>
+                <% } %>
+                <div class="submit clearfix">
+                    <a href="javascript:;" class="btn btn-success send">发送</a>
+                    <a href="javascript:;" class="cancel">取消</a>
+                    <a href="javascript:;" class="face" style="float: left; padding: 8px 0;">表情</a>
+                    <div class="face-box">
+                        <ul class="face-list"></ul>
+                    </div>
+                </div>
+            </div>  
 		</div>
 		<div class="comment-list">
 			<div class="bar"><h3>0条评论</h3></div>
-			<ul></ul>
+			<ul class="comments"></ul>
 		</div>
 	</div>
 	<div class="container-full footer">
 		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
 	</div>
     <div class="msg-tip">提示</div>
+
+    <!-- 一级评论列表字符串模板 -->
     <script type="text/x-template" id="comm-item">
-        <li>
+        <li data-id="{# id #}">
             <div class="user">
                 <a href="/users/{# user_id #}"><img src="{# avatar #}" alt=""></a>
                 <p>{# nickname #}</p>
@@ -59,11 +67,24 @@
             </div>
             <div class="comm">{# content #}</div>
             <div class="reply">
-                <i>赞</i>
+                <i data-id={# id #}>{# like_count #}</i>
                 <i data-id={# id #}>回复</i>
             </div>
+            <div class="sub-comment"><ul></ul></div>
         </li>
     </script>
+
+    <!-- 评论回复列表字符串模板 -->
+    <script type="text/x-template" id="sub-comm">
+        <li>
+            <div>
+                <a href="/users/{# user_id #}">{# nickname #}</a>
+                <span>{# content #}</span>
+            </div>
+            <div class="time">{# time #}</div>
+        </li>
+    </script>
+
     <script src="/javascripts/jquery-1.10.2.min.js"></script>
     <script src="/javascripts/common.js"></script>
     <script src="/javascripts/template.js"></script>
@@ -85,31 +106,59 @@
                 // 文章信息
                 document.title = article.title + ' - 树说';
                 $('.article > h1').text(article.title);
-                $('.text-info').text(common.formatTime(article.time) + ' 评论 ' + article.comments + ' 点赞 ' + article.count);
+                $('.text-info').text(Common.formatTime(article.time) + ' 评论 ' + article.comments + ' 点赞 ' + article.count);
                 $('.article > .content').html(article.content);
                 $('.comment-list .bar h3').text(article.comments + '条评论');
                 $('.like-btn').text('点赞 | ' + article.count);
 
-                // 评论列表
+                // 渲染评论列表
+                renderComm(comment);
+            });
+
+            // 评论列表渲染方法
+            function renderComm(comment) {
                 var tpl = Template.delSpace($('#comm-item').text()),
-                    commList = '';
+                    subTpl = Template.delSpace($('#sub-comm').text()),
+                    commList = '',
+                    subComm = [];
+                
+                // 一级评论列表
                 for (var i = comment.length - 1; i >= 0; i--) {
-                    comment[i].time = common.formatTime(comment[i].time);
-                    commList += Template.formatString(tpl, comment[i]);
+                    var likeCount = comment[i]['like_count'];
+                    comment[i]['like_count'] = likeCount == 0 ? '赞' : (likeCount + '人赞');
+                    comment[i].time = Common.formatTime(comment[i].time);
+
+                    if (!comment[i]['target_id']) {
+                        commList += Template.formatString(tpl, comment[i]);
+                    } else {
+                        subComm.push(comment[i]);
+                    }
                 }
                 $('.comment-list ul').append(commList);
-            });
 
-            // 评论发送按钮的显示隐藏
-            $('#comment').on('focus', function(e) {
-                $('.submit').show();
-            });
-            $('.submit a:last').click(function(e) {
-                $('.submit').hide();
-            });
+                // 评论回复列表
+                $('.comment-list ul li').each(function(index, ele) {
+                    var subCommList = '';
 
-            // 添加评论 - 添加成功后实时刷新评论列表
-            function addcomment(comm) {
+                    for (var i = subComm.length - 1; i >= 0; i--) {
+                         if (subComm[i]['target_id'] === $(ele).data('id')) {
+                            subCommList += Template.formatString(subTpl, subComm[i]);
+                            subComm.splice(i, 1);
+                         }
+                    };
+                    $(ele).find('.sub-comment ul').append(subCommList);
+                });
+            }
+
+            // 添加评论 - 添加成功后实时刷新评论数量
+            function addcomment(comm, cb) {
+                if (comm.content === '') {
+                    common.showTip('评论不能为空');
+                    return;
+                }
+                // 对评论内容进行处理，防止 XSS 攻击 和 表情符号替换
+                comm.content = Common.handleComment(comm.content);
+
                 $.post('/api/addcomment', comm, function(data) {
                     var user = {
                         user_id: data.result.id,
@@ -117,43 +166,126 @@
                         nickname: data.result.nickname,
                         time: new Date().toLocaleString(),
                         content: comm.content,
+                        like_count: '赞',
                     };
-                    // 更新评论列表 - 插入到最前面
-                    var tpl = Template.delSpace($('#comm-item').text());
-                    $('.comment-list ul').prepend(Template.formatString(tpl, user));
-
                     // 更新评论数量
-                    var count = common.getNum($('.comment-list .bar h3').text()) + 1 + '条评论';
+                    var count = Common.getNum($('.comment-list .bar h3').text()) + 1 + '条评论';
                     $('.comment-list .bar h3').text(count);
 
-                    // 清空评论输入框
-                    $('#comment').val('');
+                    // 执行回调函数
+                    cb(user);
                 });
             };
 
-            // 点击发送按钮，对评论进行验证和防 XSS 攻击处理
-            $('.submit a:first').click(function(e) {
-                var con = $('#comment').val();
-                if (con === '') {
-                    common.showTip('评论不能为空');
-                    return;
-                }
+            // 添加表情到评论编辑框中
+            function addFace(ele) {
+                var textarea = $(ele).parents('.comment-box').find('textarea');
+                textarea.val(textarea.val() + ':' + $(ele).attr('alt') + ': ');
+                $(ele).parents('.face-box').fadeToggle();
+                textarea.focus();
+            }
+
+            // 表情盒子显示与隐藏
+            $('.face-list').append(Common.getFaceGif());
+            $('.face').click(function(e) { $('.face-box').fadeToggle(); });
+            $('.face-box').click(function(e) { addFace(e.target); });
+
+            // 评论发送按钮的显示隐藏
+            $('.edit-comment textarea').focus(function(e) {
+                $('.edit-comment .submit').show();
+            });
+            $('.edit-comment .cancel').click(function(e) {
+                $('.edit-comment .submit').hide();
+            });
+
+            // 文章评论提交
+            $('.edit-comment .send').click(function(e) {
                 var comm = {
                     articleID: articleID,
-                    content: con.replace(/<\/?\w+>/g, '').replace(/<[^img].+?>/g, ''),
+                    content: $('.edit-comment textarea').val(),
                 };
-                addcomment(comm);
+                addcomment(comm, function(data) {
+                    // 更新评论列表 - 插入到最前面
+                    var tpl = Template.delSpace($('#comm-item').text());
+                    $('.comment-list > ul').prepend(Template.formatString(tpl, data));
+
+                    // 清空评论输入框
+                    $('.edit-comment textarea').val('');
+                });
+                console.log('文章评论事件');
             });
 
             // 文章点赞
             $('.like-btn').click(function(e) {
-                if (!$(this).data('flag')) {
-                    $.get('/api/uparticlecount/' + articleID);
-                    $(this).data('flag', 'true');
+                var count = Common.getNum($(this).text()),
+                    flag = $(this).data('flag');
 
-                    // 更新点赞数量
-                    var count = common.getNum($(this).text()) + 1;
-                    $(this).addClass('liked-btn').text('点赞 | ' + count);
+                flag ?  count -= 1 : count += 1;
+                $(this).data('flag', !flag);
+                $(this).toggleClass('liked-btn');
+                $(this).text('点赞 | ' + count);
+                $.post('/api/upartcount/'+ articleID, {count: $(this).data('flag') ? 1 : -1});
+            });
+
+            // 评论点赞
+            function likeComm(ele) {
+                var count = Common.getNum($(ele).text()),
+                    id = $(ele).data('id'),
+                    flag = $(ele).data('flag');
+
+                count = flag ? count - 1 : (count ? count + 1 : 1);
+                $(ele).data('flag', !flag);
+                $(ele).text(count + '人赞');
+                $.post('/api/upcommlike/' + id, {count: $(ele).data('flag') ? 1 : -1});
+            }
+
+            // 评论回复框显示与隐藏
+            function subComment(ele) {
+                var subComment = $(ele).parent().next();
+                if (subComment.find('.comment-box').length) {
+                    subComment.find('.comment-box').remove();
+                } else {
+                    $(".comment-box").clone().appendTo(subComment);
+                    $('.sub-comment .submit').attr('data-id', $(ele).data('id'));
+                    $('.sub-comment .submit').show();
+                }
+            }
+
+            // 回复评论提交
+            function addSubComm(ele) {
+                var targetId = $(ele).parent().data('id');
+                var comm = {
+                    articleID: articleID,
+                    targetID: targetId,
+                    content: $(ele).parent().prev().val(),
+                };
+                addcomment(comm, function(data) {
+                    // 更新评论回复列表
+                    var tpl = Template.delSpace($('#sub-comm').text());
+                    $(ele).parent().parent().prev().append(Template.formatString(tpl, data));
+
+                    // 移除评论输入框
+                    $(ele).parent().parent().remove();
+                });
+                console.log('回复评论事件');
+            }
+
+            // 评论点赞与回复
+            $('.comment-list ul').click(function(e) {
+                var eleName = e.target.nodeName.toLowerCase();
+                if (eleName === 'i') {
+                    switch($(e.target).text()) {
+                        case '回复': subComment(e.target); break;
+                        default: likeComm(e.target); break;
+                    }
+                } else if (eleName === 'a') {
+                    switch($(e.target).text()) {
+                        case '取消': $(e.target).parent().parent().remove(); break;
+                        case '发送': addSubComm(e.target); break;
+                        default: $(e.target).next().fadeToggle(); break;
+                    }
+                } else if (eleName === 'img') {
+                    addFace(e.target);
                 }
             });
         });

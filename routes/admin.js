@@ -13,6 +13,7 @@ var jsonWrite = function (res, result) {
 			msg: '操作失败'
 		});
 	} else {
+        res.set('Access-Control-Allow-Origin', '*');
 		res.json({
             success: true,
             result: result,
@@ -24,36 +25,85 @@ router.get('/', function(req, res, next) {
     res.json({result: 'adminpage'});
 });
 
-// 获取所有用户
-router.get('/api/getalluser', function(req, res, next) {
-    userDao.queryAll(null, function(result) {
+// 获取用户数量
+router.get('/getusercount', function(req, res, next) {
+    userDao.queryCount(null, function(result) {
+        jsonWrite(res, result[0]);
+    });
+});
+
+// 获取一页的用户数据（100条）
+router.get('/getuser/:pageID', function(req, res, next) {
+    var pageID = req.params.pageID,
+        start = pageID * 100,
+        end = start + 99;
+
+    userDao.queryByRange([start, end], function(result) {
         jsonWrite(res, result);
     });
 });
 
 // 删除用户
-router.get('/deluser', function(req, res, next) {
-    var userID = req.query.userID;
+router.get('/deluser/:userID', function(req, res, next) {
+    var userID = req.params.userID;
 
     userDao.delUser(userID, function(result) {
         result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
     });
 });
 
-// 通过评论 ID 删除评论
-router.get('/delcomment', function(req, res, next) {
-    var commentID = req.query.commentID;
+// 获取文章数量
+router.get('/getartcount', function(req, res, next) {
+    articleDao.queryCount(null, function(result) {
+        jsonWrite(res, result[0]);
+    });
+});
+
+// 获取一页的文章数据（100条）
+router.get('/getart/:pageID', function(req, res, next) {
+    var pageID = req.params.pageID,
+        start = pageID * 100,
+        end = start + 99;
+
+    articleDao.queryByRange([start, end], function(result) {
+        jsonWrite(res, result);
+    });
+});
+
+// 删除文章
+router.get('/delarticle/:articleID', function(req, res, next) {
+    var articleID = req.params.articleID;
+
+    articleDao.delArticle(articleID, function(result) {
+        result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
+    });
+});
+
+// 获取评论数量
+router.get('/getcommcount', function(req, res, next) {
+    commentDao.queryCount(null, function(result) {
+        jsonWrite(res, result[0]);
+    });
+});
+
+// 获取一页的评论数据（100条）
+router.get('/getcomment/:pageID', function(req, res, next) {
+    var pageID = req.params.pageID,
+        start = pageID * 100,
+        end = start + 99;
+    
+    commentDao.queryByRange([start, end], function(result) {
+        jsonWrite(res, result);
+    });
+});
+
+// 删除评论
+router.get('/delcomment/:commentID', function(req, res, next) {
+    var commentID = req.params.commentID;
 
     commentDao.delComment(commentID, function(result) {
         result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
     });
 });
 
-// 通过用户 ID 获取该用户发表的所有评论
-router.get('/getcommbyuser', function(req, res, next) {
-    var userID = req.query.userID;
-
-    commentDao.queryByUser(userID, function(result) {
-        jsonWrite(res, result);
-    });
-});
+module.exports = router;

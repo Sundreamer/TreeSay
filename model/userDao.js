@@ -11,8 +11,9 @@ var sql = {
 	updatePass: 'update user set password=? where id=?',
     updateInfo: 'update user set nickname=?,signature=? where id=?',
     updateAvatar: 'update user set avatar=? where id=?',
+    queryCount: 'select count(*) as count from user',
 	queryById: 'select * from user where id=?',
-	queryAll: 'select * from user',
+	queryByRange: 'select * from user limit ?,?',
     queryByUser: 'select * from user where user=?',
     queryByUP: 'select * from user where user=? and password=?',
 };
@@ -30,11 +31,14 @@ function crud(sql, param, cb) {
 }
 
 module.exports = {
+    queryCount: function(param, cb) {
+        crud(sql.queryCount, param, cb);
+    },
     queryById: function(param, cb) {
         crud(sql.queryById, param, cb);
     },
-    queryAll: function(param, cb) {
-        crud(sql.queryAll, param, cb);
+    queryByRange: function(param, cb) {
+        crud(sql.queryByRange, param, cb);
     },
     queryByUser: function(param, cb) {
         crud(sql.queryByUser, param, cb);

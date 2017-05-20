@@ -82,7 +82,7 @@ router.post('/login', function(req, res, next) {
 router.get('/quit', function(req, res, next) {
     req.session.userID = null;
     req.session.avatar = null;
-    jsonWrite(res, true);
+    res.redirect('/');
 });
 
 // 修改密码（需要存在会话）
@@ -137,10 +137,9 @@ router.post('/addarticle', function(req, res, next) {
 });
 
 // 删除文章 - （需要存在会话）
-router.get('/delarticle', function(req, res, next) {
+router.get('/delarticle/:articleID', function(req, res, next) {
     if (req.session.userID) {
-        var articleID = req.query.articleID,
-            userID = req.session.userID;
+        var articleID = req.params.articleID;
 
         articleDao.delArticle(articleID, function(result) {
             result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
@@ -150,7 +149,7 @@ router.get('/delarticle', function(req, res, next) {
 
 // 通过文章 ID 获取文章信息(唯一)
 router.get('/getarticlebyid/:articleID', function(req, res, next) {
-    var articleID = req.params['articleID'];
+    var articleID = req.params.articleID;
 
     articleDao.queryById(articleID, function(result) {
         jsonWrite(res, result[0]);
@@ -159,7 +158,7 @@ router.get('/getarticlebyid/:articleID', function(req, res, next) {
 
 // 通过用户 ID 获取该用户的所有文章
 router.get('/getarticlebyuser/:userID', function(req, res, next) {
-    var userID = req.params['userID'];
+    var userID = req.params.userID;
 
     articleDao.queryByUser(userID, function(result) {
         jsonWrite(res, result);
@@ -177,12 +176,12 @@ router.get('/getarticlebyrange', function(req, res, next) {
 });
 
 // 更新文章的点赞数量
-router.get('/uparticlecount/:articleID', function(req, res, next) {
-    var articleID = req.params.articleID;
+router.post('/upartcount/:articleID', function(req, res, next) {
+    var articleID = req.params.articleID,
+        count = req.body.count;
 
-    articleDao.updateCount(articleID, function(result) {
-        jsonWrite(res, true);        // 不管数据库操作结果如何，都返回true
-    });
+    articleDao.updateCount([count, articleID]);
+    jsonWrite(res, true);   // 不管数据库操作结果如何，都返回true
 });
 
 // 通过文章 ID 获取该文章的所有评论
@@ -190,7 +189,7 @@ router.get('/getcommbyartid/:articleID', function(req, res, next) {
     var articleID = res.params.articleID;
 
     commentDao.queryByArt(articleID, function(result) {
-        jsonWrite(result);
+        jsonWrite(res, result);
     });
 });
 
@@ -199,15 +198,35 @@ router.get('/getcommbytarget/:targetID', function(req, res, next) {
     var targetID = req.params.targetID;
 
     commentDao.queryByTarget(targetID, function(result) {
-        jsonWrite(result);
+        jsonWrite(res, result);
     });
 });
 
-// 获取首页文章列表信息 - 每次获取 12 条数据
+// 更新评论的点赞数量
+router.post('/upcommlike/:commentID', function(req, res, next) {
+    var commentID = req.params.commentID,
+        count = req.body.count;
+    
+    commentDao.updateLike([count, commentID]);
+    jsonWrite(res, true);
+});
+
+// 通过用户 ID 获取该用户发表的所有评论 - （需要会话）
+router.get('/getcommbyuser/:userID', function(req, res, next) {
+    if (req.session.userID) {
+        var userID = req.session.userID;
+
+        commentDao.queryByUser(userID, function(result) {
+            jsonWrite(res, result);
+        });
+    }
+});
+
+// 获取首页文章列表信息 - 每次获取 24 条数据
 router.get('/getindexart/:pageID', function(req, res, next) {
     var pageID = req.params.pageID,
-        start = 12 * pageID,
-        end = start + 11;
+        start = pageID * 12,
+        end = start + 23;
 
     articleDao.queryByRange([start, end], function(result) {
         jsonWrite(res, result);
@@ -280,8 +299,9 @@ router.post('/addcomment', function(req, res, next) {
             delete result[0].password;
             jsonWrite(res, result[0]);
         });
+        // 更新文章的评论数
+        articleDao.updateComm(articleID);
     });
-    articleDao.updateComm(articleID);
 });
 
 module.exports = router;

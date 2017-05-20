@@ -9,7 +9,8 @@ var sql = {
     insert: 'insert into article(user_id, title, abstract, content, cover) values(?,?,?,?,?)',
     delete: 'delete from article where id=?',
     updateComm: 'update article set comments=comments+1 where id = ?',
-    updateCount: 'update article set count=count+1 where id = ?',
+    updateCount: 'update article set count=count+? where id = ?',
+    queryCount: 'select count(*) as count from article',
     queryById: 'select * from article where id=?',
     queryByUser: 'select * from article where user_id=? order by article.time desc',
     queryByRange: 'select id,title,time,abstract,count,cover,comments from article order by article.time desc limit ?,?',
@@ -49,4 +50,7 @@ module.exports = {
     queryByRange: function(param, cb) {
         crud(sql.queryByRange, param, cb);
     },
+    queryCount: function(param, cb) {
+        crud(sql.queryCount, param, cb);
+    }
 };
