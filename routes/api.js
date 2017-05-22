@@ -42,6 +42,15 @@ router.get('/getuserbyid/:userID', function(req, res, next) {
     });
 });
 
+// 通过用户 ID 获取用户所有喜欢的文章
+router.get('/getlikebyid', function(req, res, next) {
+    var userID = req.session.userID;
+
+    userDao.queryAllLike(userID, function(result) {
+        jsonWrite(res, result);
+    });
+});
+
 // 通过用户名获取用户信息（用于在注册时检测用户名是否已被注册）
 router.get('/isreg/:username', function(req, res, next) {
     var username = req.params.username;
@@ -94,6 +103,8 @@ router.post('/modifypwd', function(req, res, next) {
         userDao.modPass([userID, pwd], function(result) {
             result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 
@@ -106,6 +117,8 @@ router.get('/upuserinfo', function(req, res, next) {
             result[0] && delete result[0].password;
             jsonWrite(res, result[0]);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 // 用户更新个人信息（需要存在会话）
@@ -118,6 +131,8 @@ router.post('/upuserinfo', function(req, res, next) {
         userDao.upUserInfo([nickname, signature, userID], function(result) {
             result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 
@@ -133,6 +148,8 @@ router.post('/addarticle', function(req, res, next) {
         articleDao.addArticle([userID, title, abstract, content, cover], function(result) {
             result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 
@@ -144,6 +161,8 @@ router.get('/delarticle/:articleID', function(req, res, next) {
         articleDao.delArticle(articleID, function(result) {
             result.affectedRows > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 
@@ -175,13 +194,32 @@ router.get('/getarticlebyrange', function(req, res, next) {
     });
 });
 
-// 更新文章的点赞数量
+// 查询用户是否喜欢了该文章
+router.get('/getislike/:articleID', function(req, res, next) {
+    // 如果用户没有登录，直接返回 false
+    if (req.session.userID) {
+        var articleID = req.params.articleID,
+            userID = req.session.userID;
+
+        userDao.queryisLike([userID, articleID], function(result) {
+            result[0].count > 0 ? jsonWrite(res, true) : jsonWrite(res, false);
+        });
+    } else {
+        jsonWrite(res, undefined);
+    }
+});
+
+// 更新文章的喜欢数量
 router.post('/upartcount/:articleID', function(req, res, next) {
     var articleID = req.params.articleID,
-        count = req.body.count;
+        userID = req.session.userID,
+        count = req.body.count,
+        isLike = count > 0 ? 'insertLike' : 'delLike';
 
     articleDao.updateCount([count, articleID]);
-    jsonWrite(res, true);   // 不管数据库操作结果如何，都返回true
+    userDao[isLike]([userID, articleID], function(result) {
+        jsonWrite(res, true);
+    });
 });
 
 // 通过文章 ID 获取该文章的所有评论
@@ -219,6 +257,8 @@ router.get('/getcommbyuser/:userID', function(req, res, next) {
         commentDao.queryByUser(userID, function(result) {
             jsonWrite(res, result);
         });
+    } else {
+        jsonWrite(res, undefined);
     }
 });
 

@@ -12,43 +12,48 @@
 	<div class="container-one article">
 		<h1>文章标题</h1>
 		<div class="author clearfix">
-			<a href="#" class="avatar"><img src="/images/avatar.jpg" alt="" class="img-small"></a>
+			<a href="#"><img src="/images/avatar.jpg" alt="" class="img-small"></a>
 			<p class="name">作者名</p>
-			<p class="info text-info">文章信息</p>
+			<p class="info text-info">
+                <span>时间</span>
+                评论<span>0</span>
+                喜欢<span>0</span>
+            </p>
 		</div>
 		<div class="content">
 			<p>文章内容</p>
 		</div>
 		<div class="show">
-			<div class="author clearfix">
-				<a href="#" class="avatar"><img src="/images/avatar.jpg" alt="" class="img-small"></a>
-				<a href="#" class="btn btn-success fr">关注</a>
-				<p class="name">作者昵称</p>
-				<p class="info user-info">写了 40928 字，被 1298 人关注，获得了 448 个喜欢</p>
-			</div>
-			<div class="sign">作者个性签名</div>
+			<a href="#"><img src="/images/avatar.jpg" alt=""></a>
+            <div class="sign">作者个性签名</div>
 		</div>
-		<div class="like"><a href="javascript:;" class="like-btn" data-flag="false">点赞 | 0</a></div>
+		<div class="like">
+            <% if (isLogin) { %>
+                <a href="javascript:;" class="like-btn" data-flag="false">喜欢 | <span>0</span></a>
+            <% } else { %>
+                <a href="/users/login" class="like-btn">喜欢 | <span>0</span></a>
+            <% } %>
+        </div>
 		<div class="edit-comment">
 			<img src="/images/avatar.jpg" alt="">
             <div class="comment-box">
                 <% if(isLogin) { %>
                     <textarea cols="30" rows="3" placeholder="写下你的评论..."></textarea>
+                    <div class="submit clearfix">
+                        <a href="javascript:;" class="btn btn-success send">发送</a>
+                        <a href="javascript:;" class="cancel">取消</a>
+                        <a href="javascript:;" class="face" style="float: left; padding: 8px 0;">表情</a>
+                        <div class="face-box">
+                            <ul class="face-list"></ul>
+                        </div>
+                    </div>
                 <% } else { %>
                     <div class="shade">请登录后再评论</div>
                 <% } %>
-                <div class="submit clearfix">
-                    <a href="javascript:;" class="btn btn-success send">发送</a>
-                    <a href="javascript:;" class="cancel">取消</a>
-                    <a href="javascript:;" class="face" style="float: left; padding: 8px 0;">表情</a>
-                    <div class="face-box">
-                        <ul class="face-list"></ul>
-                    </div>
-                </div>
-            </div>  
+            </div>
 		</div>
 		<div class="comment-list">
-			<div class="bar"><h3>0条评论</h3></div>
+			<div class="bar"><span>0</span>条评论</div>
 			<ul class="comments"></ul>
 		</div>
 	</div>
@@ -97,23 +102,50 @@
                 var user = data.result.user,
                     article = data.result.article,
                     comment = data.result.comment;
+
+                // 页面标题
+                document.title = article.title + ' - 树说';
                 
                 // 作者信息
-                $('.avatar').attr('href', '/users/' + user.id);
+                $('.author').attr('href', '/users/' + user.id);
+                $('.author img').attr('src', user.avatar);
                 $('.name').text(user.nickname);
+                $('.show a').attr('href', '/users/' + user.id);
+                $('.show img').attr('src', user.avatar);
                 $('.show .sign').text(user.signature);
 
-                // 文章信息
-                document.title = article.title + ' - 树说';
+                // 文章信息   
                 $('.article > h1').text(article.title);
-                $('.text-info').text(Common.formatTime(article.time) + ' 评论 ' + article.comments + ' 点赞 ' + article.count);
+                $('.text-info span').eq(0).text(Common.formatTime(article.time));
+                $('.text-info span').eq(1).text(article.comments);
+                $('.text-info span').eq(2).text(article.count);
                 $('.article > .content').html(article.content);
-                $('.comment-list .bar h3').text(article.comments + '条评论');
-                $('.like-btn').text('点赞 | ' + article.count);
+                $('.comment-list .bar span').text(article.comments);
+                $('.like-btn span').text(article.count);
 
                 // 渲染评论列表
                 renderComm(comment);
             });
+
+            // 如果用户登录了，查询是否喜欢了该文章，并添加点击事件
+            if ($('.like-btn').data('flag') === false) {
+                $.get('/api/getislike/' + articleID, function(data) {
+                    $('.like-btn').attr('data-flag', data.result);
+                    $('.like-btn').addClass('liked');
+
+                    // 文章点赞
+                    $('.like-btn').click(function(e) {
+                        var count = $(this).find('span').text() - 0,
+                            flag = $(this).data('flag');
+
+                        flag ?  count -= 1 : count += 1;
+                        $(this).data('flag', !flag);
+                        $(this).toggleClass('liked');
+                        $(this).find('span').text(count);
+                        $.post('/api/upartcount/'+ articleID, {count: $(this).data('flag') ? 1 : -1});
+                    });
+                });
+            }
 
             // 评论列表渲染方法
             function renderComm(comment) {
@@ -169,8 +201,8 @@
                         like_count: '赞',
                     };
                     // 更新评论数量
-                    var count = Common.getNum($('.comment-list .bar h3').text()) + 1 + '条评论';
-                    $('.comment-list .bar h3').text(count);
+                    var count = $('.comment-list .bar span').text() - 0 + 1;
+                    $('.comment-list .bar span').text(count);
 
                     // 执行回调函数
                     cb(user);
@@ -212,19 +244,6 @@
                     // 清空评论输入框
                     $('.edit-comment textarea').val('');
                 });
-                console.log('文章评论事件');
-            });
-
-            // 文章点赞
-            $('.like-btn').click(function(e) {
-                var count = Common.getNum($(this).text()),
-                    flag = $(this).data('flag');
-
-                flag ?  count -= 1 : count += 1;
-                $(this).data('flag', !flag);
-                $(this).toggleClass('liked-btn');
-                $(this).text('点赞 | ' + count);
-                $.post('/api/upartcount/'+ articleID, {count: $(this).data('flag') ? 1 : -1});
             });
 
             // 评论点赞
@@ -235,7 +254,7 @@
 
                 count = flag ? count - 1 : (count ? count + 1 : 1);
                 $(ele).data('flag', !flag);
-                $(ele).text(count + '人赞');
+                $(ele).find('span').text(count);
                 $.post('/api/upcommlike/' + id, {count: $(ele).data('flag') ? 1 : -1});
             }
 
@@ -267,10 +286,9 @@
                     // 移除评论输入框
                     $(ele).parent().parent().remove();
                 });
-                console.log('回复评论事件');
             }
 
-            // 评论点赞与回复
+            // 评论点赞与回复 - 事件委托机制
             $('.comment-list ul').click(function(e) {
                 var eleName = e.target.nodeName.toLowerCase();
                 if (eleName === 'i') {

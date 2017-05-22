@@ -28,6 +28,7 @@ i { font-style: normal; }
 .img-small {
 	float: left;
 	width: 50px;
+    height: 50px;
 	border-radius: 100%;
 	margin-right: 10px;
 }
@@ -50,31 +51,44 @@ i { font-style: normal; }
 	font-size: 12px;
 	color: #969696;
 }
+.article .author .info span { margin: 0 5px; }
 
 /* 文章内容 */
 .content p { line-height: 1.5em; }
 
 /* 文章尾部作者资料卡 */
 .show {
-	margin: 30px 0;
-	padding: 15px;
-	border: 1px solid #E1E1E1;
-	border-radius: 5px;
-	background: #F8F8F8;
+    position: relative;
+    height: 80px;
+    margin: 30px 0;
+    text-align: center;
+}
+.show:before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0;
+    width: 100%;
+    height: 1px;
+    background: #DFE5EB;
+    z-index: -1;
+}
+.show  img {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+    border: 1px solid #DFE5EB;
+    border-radius: 100%;
+    background: #fff;
 }
 .show .sign {
-	padding-top: 10px;
 	font-size: 12px;
 	color: #969696;
-	border-top: 1px solid #e1e1e1;
 }
 
 /* 喜欢 */
 .like {
 	margin: 20px 0;
-	padding-top: 20px;
-	text-align: left;
-	border-top: 1px solid #e1e1e1;
+	text-align: center;
 }
 .like-btn {
 	display: inline-block;
@@ -85,7 +99,7 @@ i { font-style: normal; }
 	border: 1px solid #EA6F5A;
 	border-radius: 40px;
 }
-.liked-btn {
+.liked {
     color: #fff;
     background: #EA6F5A
 }
@@ -100,6 +114,7 @@ i { font-style: normal; }
 	position: absolute;
 	left: 0;
 	width: 40px;
+    height: 40px;
 	border-radius: 40px;
 }
 
@@ -168,11 +183,11 @@ i { font-style: normal; }
 	margin: 30px 0; 
 }
 .comment-list .bar {
+    font-size: 16px;
 	color: #333;
 	line-height: 50px;
 	border-bottom: 1px solid #e1e1e1;
 }
-.bar h3 { font-weight: bold; }
 
 .comment-list .comments { padding: 0; }
 
@@ -185,6 +200,7 @@ i { font-style: normal; }
 .comments > li .user img{
 	float: left;
 	width: 40px;
+    height: 40px;
 	margin-right: 10px;
 	border-radius: 100%;
 }

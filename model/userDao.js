@@ -4,10 +4,12 @@
 var mysql = require('mysql');
 var config = require('./config');
 
-// 用户表常用的 sql 语句
+// 用户表常用的 sql 语句（包括 like 表的增删查操作）
 var sql = {
     insert:'insert into user(user, password, nickname) values(?,?,?)',
+    insertLike: 'insert into likearticle(user_id, article_id) values(?,?)',
 	delete: 'delete from user where id=?',
+    delLike: 'delete from likearticle where user_id=? and article_id=?',
 	updatePass: 'update user set password=? where id=?',
     updateInfo: 'update user set nickname=?,signature=? where id=?',
     updateAvatar: 'update user set avatar=? where id=?',
@@ -16,6 +18,8 @@ var sql = {
 	queryByRange: 'select * from user limit ?,?',
     queryByUser: 'select * from user where user=?',
     queryByUP: 'select * from user where user=? and password=?',
+    queryisLike: 'select count(*) as count from likearticle where user_id=? and article_id=?',
+    queryAllLike: 'select * from likeartview where user_id=?',
 };
 
 var pool = mysql.createPool(config);
@@ -60,5 +64,17 @@ module.exports = {
     },
     queryByUP: function(param, cb) {
         crud(sql.queryByUP, param, cb);
-    }
+    },
+    insertLike: function(param, cb) {
+        crud(sql.insertLike, param, cb);
+    },
+    delLike: function(param, cb) {
+        crud(sql.delLike, param, cb);
+    },
+    queryisLike: function(param, cb) {
+        crud(sql.queryisLike, param, cb);
+    },
+    queryAllLike: function(param, cb) {
+        crud(sql.queryAllLike, param, cb);
+    },
 };
