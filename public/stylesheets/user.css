@@ -1,6 +1,6 @@
 /* 单独重置样式 */
 body {
-	padding-top: 70px;
+	padding: 70px 0 80px;
     background: #f9f9f9;
 }
 h1, h2, h3, h4, h5, h6, p, input,ul,li {
@@ -122,13 +122,3 @@ address, caption, cite, code, i, em, b, strong {
 
 /* 喜欢文章列表 */
 .like-art { display: none; }
-
-/* 底部 */
-.footer {
-	margin-top: 40px;
-	padding: 20px;
-	text-align: center;
-	color: #A7AEAF;
-	border: none;
-	background: transparent;
-}

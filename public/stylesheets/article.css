@@ -1,7 +1,7 @@
 /* 单独重置样式 */
 body {
     margin: 0;
-    padding-top: 70px; 
+    padding: 70px 0 80px;
 }
 li { margin: 10px 0; }
 i { font-style: normal; }
