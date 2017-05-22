@@ -26,6 +26,7 @@ address, caption, cite, code, i, em, b, strong {
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
 .main {
+    position: relative;
     padding: 10px 50px;
     height: 100px;
 }
@@ -46,7 +47,9 @@ address, caption, cite, code, i, em, b, strong {
     font-size: 14px;
     color: #999;
 }
-.user-box .setting { 
+.user-box .setting {
+    position: absolute;
+    top: 10px; right: 50px;
     text-align: center;
     margin: 10px 0;
 }
@@ -63,6 +66,19 @@ address, caption, cite, code, i, em, b, strong {
 .user-box .setting a:hover {
     color: #fff;
     background: #EA6F5A;
+}
+.user-box .menu li{
+    float: left;
+    line-height: 40px;
+    margin: 0 5px;
+}
+.user-box .menu li a{
+    padding: 5px 10px;
+    color: #646464;
+}
+.user-box .menu li a:hover, .user-box .menu li.active a {
+    color: #EA6F5A;
+    border-bottom: 2px solid #EA6F5A;
 }
 
 /* 文章列表 */
@@ -82,13 +98,15 @@ address, caption, cite, code, i, em, b, strong {
     color: #333;
 }
 .article-list li .abstract{
-    height: 140px;
+    height: 9em;
     color: #999;
 	font-size: 14px;
 	line-height: 1.5em;
     overflow: hidden;
 }
 .article-list li .time {
+    position: absolute;
+    bottom: 10px;
 	font-size: 14px;
 	line-height: 20px;
 }
@@ -101,6 +119,9 @@ address, caption, cite, code, i, em, b, strong {
     height: 160px;
 }
 .article-list .time i { margin: 0 5px; }
+
+/* 喜欢文章列表 */
+.like-art { display: none; }
 
 /* 底部 */
 .footer {

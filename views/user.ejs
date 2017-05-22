@@ -13,21 +13,25 @@
 		<div class="user-box">
 			<div class="main">
 				<img src="<%= avatar%>" alt="头像" class="avatar">
-				<h3 class="name">用户昵称</h3>
+				<h3 class="name ">用户昵称</h3>
                 <p>文艺是什么</p>
+                <div class="setting">
+                    <% if (isSelf) { %>
+                        <a href="/users/setting">设置</a>
+                        <a href="#">消息</a>
+                    <% } else { %>
+                        <a href="#">关注</a>
+                        <a href="#">私信</a>
+                    <% } %>
+                </div>
 			</div>
-            <div class="setting">
-                <% if (isSelf) { %>
-                    <a href="/users/setting">编辑个人资料</a>
-                    <a href="#">查看消息</a>
-                    <a href="#">喜欢的文章</a>
-                <% } else { %>
-                    <a href="#">关注</a>
-                    <a href="#">私信</a>
-                <% } %>
-			</div>
+            <ul class="menu clearfix">
+                <li class="active"><a href="javascript:;">我的文章</a></li>
+                <li><a href="javascript:;">喜欢的文章</a></li>
+            </ul>
 		</div>
-		<ul class="article-list"></ul>
+		<ul class="article-list my-art"></ul>
+        <ul class="article-list like-art"></ul>
 	</div>
 	<div class="container-full footer">
 		<p>TreeSay © 2017 Powered by github.com/Sundreamer</p>
@@ -40,7 +44,7 @@
                 <div class="time">
                     <i>{# time #}</i>
                     <i>评论 {# comments #}</i>
-                    <i>点赞 {# count #}</i>
+                    <i>喜欢 {# count #}</i>
                 </div>
             </div>
         </li>
@@ -56,7 +60,7 @@
                 <div class="time">
                     <i>{# time #}</i>
                     <i>评论 {# comments #}</i>
-                    <i>点赞 {# count #}</i>
+                    <i>喜欢 {# count #}</i>
                 </div>
             </div>
         </li>
@@ -65,24 +69,51 @@
     <script src="/javascripts/template.js"></script>
     <script>
         $(function() {
-            var url = '/api/userpage' + location.href.slice(location.href.lastIndexOf('/'));
+            var userID = location.href.slice(location.href.lastIndexOf('/'));
 
-            $.get(url, function(data) {
+            // 获取我的文章数据
+            $.get('/api/userpage' + userID, function(data) {
                 var result = '',
                     user = data.result.user,
-                    article = data.result.article,
-                    txtTpl = Template.delSpace($('#text-item').text()),
-                    imgTpl = Template.delSpace($('#img-item').text());
+                    article = data.result.article;
                 
                 $('.main .name').text(user.nickname);
                 $('.info > p').text(user.signature);
 
-                for (var i = 0, len = article.length; i < len; i++) {
-                    article[i].time = article[i].time.slice(0, 10);
-                    article[i].abstract = article[i].abstract;
-                    result += Template.formatString(article[i].cover ? imgTpl : txtTpl, article[i]);
+                ArticleList(article, $('.my-art'));
+            });
+
+            // 渲染文章列表
+            function ArticleList(data, ele) {
+                var result = '',
+                    txtTpl = Template.delSpace($('#text-item').text()),
+                    imgTpl = Template.delSpace($('#img-item').text());
+
+                for (var i = 0, len = data.length; i < len; i++) {
+                    data[i].time = data[i].time.slice(0, 10);
+                    data[i].abstract = data[i].abstract;
+                    result += Template.formatString(data[i].cover ? imgTpl : txtTpl, data[i]);
                 }
-                $('.article-list').append(result);
+                ele.append(result);
+            }
+
+            // 获取喜欢的文章数据，只获取一次
+            function getLikeArt() {
+                if ($('.like-art li').length == 0) {
+                    $.get('/api/getlikebyid', function(data) {
+                        data.result.forEach(function(val, index) {
+                            val.id = val['article_id'];
+                        });
+                        ArticleList(data.result, $('.like-art'));
+                    });
+                }
+            }
+
+            $('.menu a').click(function(e) {
+                var target = $(e.target);
+                $('.article-list').fadeToggle();
+                $('.menu li').toggleClass('active');
+                target.text() === '喜欢的文章' ? getLikeArt() : '';
             });
         });
     </script>

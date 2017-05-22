@@ -227,11 +227,11 @@ input, textarea, select, button {
 }
 
 @media screen and (max-width: 1000px) {
-	.container-one { width: 70%; }
+	.container-one { width: 80%; }
 	.col-1 { width: 50%; }
 }
 
 @media screen and (max-width: 600px) {
-	.container-one { width: 80%; }
+	.container-one { width: 100%; }
 	.col-1 { width: 100%; }
 }

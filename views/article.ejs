@@ -131,7 +131,7 @@
             if ($('.like-btn').data('flag') === false) {
                 $.get('/api/getislike/' + articleID, function(data) {
                     $('.like-btn').attr('data-flag', data.result);
-                    $('.like-btn').addClass('liked');
+                    data.result ? $('.like-btn').addClass('liked') : '';
 
                     // 文章点赞
                     $('.like-btn').click(function(e) {
