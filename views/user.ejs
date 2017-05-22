@@ -12,21 +12,19 @@
 	<div class="container-one">
 		<div class="user-box">
 			<div class="main">
-				<div class="avatar"><img src="<%= avatar%>" alt="头像" class="img-border"></div>
+				<img src="<%= avatar%>" alt="头像" class="avatar">
 				<h3 class="name">用户昵称</h3>
+                <p>文艺是什么</p>
 			</div>
-			<div class="info">
-				<p>文艺是什么</p>
-				<div class="setting">
-                    <% if (isSelf) { %>
-                        <a href="/users/setting">编辑个人资料</a>
-                        <a href="#">查看消息</a>
-                        <a href="#">喜欢的文章</a>
-                    <% } else { %>
-					    <a href="#">关注</a>
-                        <a href="#">私信</a>
-                    <% } %>
-				</div>
+            <div class="setting">
+                <% if (isSelf) { %>
+                    <a href="/users/setting">编辑个人资料</a>
+                    <a href="#">查看消息</a>
+                    <a href="#">喜欢的文章</a>
+                <% } else { %>
+                    <a href="#">关注</a>
+                    <a href="#">私信</a>
+                <% } %>
 			</div>
 		</div>
 		<ul class="article-list"></ul>
@@ -36,25 +34,30 @@
 	</div>
     <script type="text/x-template" id="text-item">
         <li>
-            <a href="/article/{# id #}" class="title text-light">{# title #}</a>
-            <div class="content">{# abstract #}</div>
-            <div class="time">
-                <i>{# time #}</i>
-                <i>评论 {# comments #}</i>
-                <i>点赞 {# count #}</i>
+            <div class="info">
+                <a href="/article/{# id #}" class="title">{# title #}</a>
+                <div class="abstract">{# abstract #}</div>
+                <div class="time">
+                    <i>{# time #}</i>
+                    <i>评论 {# comments #}</i>
+                    <i>点赞 {# count #}</i>
+                </div>
             </div>
         </li>
     </script>
     <script type="text/x-template" id="img-item">
-        <li>
-            <div class="cover">
-                <a href="/article/{# id #}"><img src="{# cover #}" alt="" class="img-border"></a>
+        <li style="padding-right: 220px;">
+            <div class="cover fr">
+                <a href="/article/{# id #}"><img src="{# cover #}" alt=""></a>
             </div>
-            <div class="content">{# abstract #}</div>
-            <div class="time">
-                <i>{# time #}</i>
-                <i>评论 {# comments #}</i>
-                <i>点赞 {# count #}</i>
+            <div class="info">
+                <a href="/article/{# id #}" class="title">{# title #}</a>
+                <div class="abstract">{# abstract #}</div>
+                <div class="time">
+                    <i>{# time #}</i>
+                    <i>评论 {# comments #}</i>
+                    <i>点赞 {# count #}</i>
+                </div>
             </div>
         </li>
     </script>
@@ -63,13 +66,6 @@
     <script>
         $(function() {
             var url = '/api/userpage' + location.href.slice(location.href.lastIndexOf('/'));
-
-            // 对摘要进行处理 - 用 p 标签包裹起来
-            function formatAbs(str) {
-                var result = '<p>';
-                result += str.replace(/\s+?/g, '</p><p>');
-                return result + '</p>';
-            }
 
             $.get(url, function(data) {
                 var result = '',
@@ -83,7 +79,7 @@
 
                 for (var i = 0, len = article.length; i < len; i++) {
                     article[i].time = article[i].time.slice(0, 10);
-                    article[i].abstract = formatAbs(article[i].abstract);
+                    article[i].abstract = article[i].abstract;
                     result += Template.formatString(article[i].cover ? imgTpl : txtTpl, article[i]);
                 }
                 $('.article-list').append(result);

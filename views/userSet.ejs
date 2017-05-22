@@ -68,11 +68,12 @@
 	                        success: function(data) {
 	                            if (data.result) {
                                     $('#avatar').attr('src', data.result.url);
+                                    Common.showTip('上传头像成功');
                                 }
 	                        },
 	                    });
 		            } else {
-		            	common.showTip('只支持 jpg 和 png 格式的图片！');
+		            	Common.showTip('只支持 jpg 和 png 格式的图片！');
 		            } 
 	        	}
 			});
@@ -84,10 +85,10 @@
                     nickname = document.querySelector('#nickname'),
                     signature = document.querySelector('#signature');
 
-                valids.add('require', nickname, function() { common.showTip('昵称不能为空'); });
-                valids.add('fiftyLen', nickname, function() { common.showTip('昵称长度不能超过50个字符'); });
-                valids.add('require', signature, function() { common.showTip('签名不能为空'); });
-                valids.add('fiftyLen', signature, function() { common.showTip('签名长度不能超过50个字符'); });
+                valids.add('require', nickname, function() { Common.showTip('昵称不能为空'); });
+                valids.add('fiftyLen', nickname, function() { Common.showTip('昵称长度不能超过50个字符'); });
+                valids.add('require', signature, function() { Common.showTip('签名不能为空'); });
+                valids.add('fiftyLen', signature, function() { Common.showTip('签名长度不能超过50个字符'); });
                 
                 if (valids.emit()) {
                     var newData = {
@@ -96,11 +97,11 @@
                     };
                     $.post('/api/upuserinfo', newData, function(data) {
                         if (data.result) {
-                            common.showTip('保存成功');
+                            Common.showTip('保存成功');
                             nickname.value = newData.nickname;
                             signature.value = newData.signature;
                         } else {
-                            common.showTip('保存失败');
+                            Common.showTip('保存失败');
                         }
                     });
                 }

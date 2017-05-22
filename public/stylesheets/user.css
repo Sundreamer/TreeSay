@@ -1,11 +1,9 @@
 /* 单独重置样式 */
 body {
 	padding-top: 70px;
-	background-image: url(../images/userbg.jpg);
-	background-size: 100vw 100vh;
-	background-attachment: fixed;
+    background: #f9f9f9;
 }
-h1, h2, h3, h4, h5, h6, p, input {
+h1, h2, h3, h4, h5, h6, p, input,ul,li {
 	margin: 0;
 	padding: 0;
 }
@@ -22,90 +20,87 @@ address, caption, cite, code, i, em, b, strong {
 }
 /* 用户个人信息 */
 .user-box {
-	margin-top: 50px;
+	margin-top: 20px;
 	border-bottom: 1px dotted #ccc;
+    background: rgba(255, 255, 255, .6);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
-.user-box .main {
-	padding: 20px 0;
-	border-top: 4px double #7F9397;
-	border-bottom: 4px double #7F9397;
+.main {
+    padding: 10px 50px;
+    height: 100px;
 }
 .main .avatar {
-	width: 128px;
-	height: 128px;
-	margin: 0 auto 20px;
+    float: left;
+	width: 100px;
+	height: 100px;
+    border: 1px solid #e0e0e0;
+    margin-right: 10px;
+    border-radius: 100px;
 }
 .main .name {
-	font-size: 30px;
-	text-align: center;
-	color: #fff;
+	font-size: 24px;
+    color: #666;
+    padding: 20px 0;
 }
-.user-box .info {
-	line-height: 50px;
-	font-size: 14px;
-	color: #A7AEAF;
-	text-align: center;
+.main p { 
+    font-size: 14px;
+    color: #999;
 }
-.info .setting a{
+.user-box .setting { 
+    text-align: center;
+    margin: 10px 0;
+}
+.user-box .setting a{
 	display: inline-block;
 	padding: 5px 8px;
 	margin: 0 5px;
-	color: #fff;
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 1em;
-	border: 1px solid #A7AEAF;
+    color: #EA6F5A;
+	border: 1px solid #EA6F5A;
 	border-radius: 2px;
+}
+.user-box .setting a:hover {
+    color: #fff;
+    background: #EA6F5A;
 }
 
 /* 文章列表 */
-.article-list {
-    padding: 0;
-}
 .article-list li {
-	padding: 50px 0 30px;
-	border-bottom: 1px dotted #ccc;
-}
-.article-list li .time {
-	font-size: 14px;
-	color: #fff;
-	line-height: 30px;
-	margin-top: 20px;
+    position: relative;
+    margin: 10px 0;
+	padding: 10px;
+    height: 200px;
+    color: #666;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
 .article-list li .title{
 	font-size: 20px;
 	text-align: left;
-	color: #fff;
+    line-height: 40px;
+    color: #333;
 }
-.article-list li .content p {
+.article-list li .abstract{
+    height: 140px;
+    color: #999;
 	font-size: 14px;
 	line-height: 1.5em;
-	margin: 10px 0;
-	color: #A7AEAF;
+    overflow: hidden;
+}
+.article-list li .time {
+	font-size: 14px;
+	line-height: 20px;
+}
+.article-list .cover {
+    position: absolute;
+    top: 10px; right: 10px;
 }
 .article-list .cover img {
-	width: 100%;
-	border-radius: 0;
+	width: 200px;
+    height: 160px;
 }
-.article-list .time i {
-    margin: 0 5px;
-}
-
-/* 带边框的图片 */
-.img-border {
-	width: 100%;
-	border: 5px solid rgba(255,255,255,.2);
-	border-radius: 100%;
-	transition: all .5s;
-	cursor: pointer;
-}
-.img-border:hover {
-	box-shadow: 0 0 12px rgba(255,255,255,.8);
-}
-
-/* 文字发光 */
-.text-light:hover {
-	text-shadow: 0 0 12px rgba(255,255,255,.6);
-}
+.article-list .time i { margin: 0 5px; }
 
 /* 底部 */
 .footer {
