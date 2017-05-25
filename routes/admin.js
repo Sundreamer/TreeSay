@@ -22,7 +22,7 @@ var jsonWrite = function (res, result) {
 };
 
 router.get('/', function(req, res, next) {
-    res.json({result: 'adminpage'});
+    res.render('admin');
 });
 
 // 获取用户数量
@@ -66,6 +66,7 @@ router.get('/getart/:pageID', function(req, res, next) {
         end = start + 99;
 
     articleDao.queryByRange([start, end], function(result) {
+        result.forEach((val, index) => { delete val.content; });
         jsonWrite(res, result);
     });
 });

@@ -269,6 +269,7 @@ router.get('/getindexart/:pageID', function(req, res, next) {
         end = start + 23;
 
     articleDao.queryByRange([start, end], function(result) {
+        result.forEach((val, index) => { delete val.content; });
         jsonWrite(res, result);
     });
 });
@@ -293,9 +294,7 @@ router.get('/userpage/:userID', function(req, res, next) {
     });
     promise.then(() => {
         articleDao.queryByUser(userID, (result) => {
-            for (var i = 0, len = result.length; i < len; i++) {
-                delete result[i].content;
-            }
+            result.forEach((val, index) => { delete val.content; });
             data.article = result;
             jsonWrite(res, data);
         });
@@ -310,15 +309,10 @@ router.get('/artpage/:articleID', function(req, res, next) {
     var promise = new Promise((resolve, reject) => {
         articleDao.queryById(artID, (result) => {
             data.article = result[0];
-            resolve(result[0]['user_id']);
+            resolve();
         });
     });
-    promise.then((userID) => {
-        userDao.queryById(userID, (result) => {
-            result[0] && delete result[0].password;
-            data.user = result[0];
-        });
-    }).then(() => {
+    promise.then(() => {
         commentDao.queryByArt(artID, (result) => {
             data.comment = result;
             jsonWrite(res, data);
