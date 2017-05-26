@@ -7,7 +7,7 @@ var config = require('./config');
 // 评论表常用 sql 语句
 var sql = {
     insert: 'insert into comment(user_id, article_id, target_id, content) values(?,?,?,?)',
-    delete: 'delete from comment where id=?',
+    delete: 'update comment set content="该评论已被管理员删除" where id=?',
     updateLike: 'update comment set like_count=like_count+? where id=?',
     queryCount: 'select count(*) as count from CommentView',
     queryByArt: 'select * from CommentView where article_id=?',

@@ -98,7 +98,7 @@ router.get('/getcomment/:pageID', function(req, res, next) {
     });
 });
 
-// 删除评论
+// 删除评论 - 不真正删除
 router.get('/delcomment/:commentID', function(req, res, next) {
     var commentID = req.params.commentID;
 
